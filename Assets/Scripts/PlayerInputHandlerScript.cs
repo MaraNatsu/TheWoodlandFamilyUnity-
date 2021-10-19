@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Net.Http;
 using System.Text;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.UI;
@@ -10,34 +12,52 @@ public class PlayerInputHandlerScript : MonoBehaviour
     [SerializeField]
     private InputField PlayerName;
     [SerializeField]
-    private InputField WordKey;
+    private InputField WordKeyToCreateRoom;
+    [SerializeField]
+    private InputField WordKeyToJoinRoom;
     [SerializeField]
     private InputField PlayerNumber;
 
     string roomCreationRoute = "http://localhost:5000/api/Home/create-room";
     string roomJoiningRoute = "http://localhost:5000/api/Home/join-room";
 
-    public void SendData()
+    public void SendRoomCreationRequest()
     {
         StartCoroutine(SendRoomCreationData());
     }
 
+    public void SendRoomJoiningRequest()
+    {
+        StartCoroutine(SendRoomJoiningData());
+    }
+
     private IEnumerator SendRoomCreationData()
     {
-        string jsonRequest = $"{{\"PlayerName\": \"{PlayerName.text}\", \"WordKey\": \"{WordKey.text}\", \"PlayerNumber\": {PlayerNumber.text}}}";
-        UnityWebRequest roomCreationRequest = new UnityWebRequest(roomCreationRoute, "POST");
-        byte[] bodyRaw = Encoding.UTF8.GetBytes(jsonRequest);
-        roomCreationRequest.uploadHandler = (UploadHandler) new UploadHandlerRaw(bodyRaw);
-        roomCreationRequest.downloadHandler = (DownloadHandler) new DownloadHandlerBuffer();
-        roomCreationRequest.SetRequestHeader("Content-Type", "application/json");
-        yield return roomCreationRequest.SendWebRequest();
+        string jsonRequest = $"{{\"PlayerName\": \"{PlayerName.text}\", \"WordKey\": \"{WordKeyToCreateRoom.text}\", \"PlayerNumber\": {PlayerNumber.text}}}";
+        return CreateRequest(roomCreationRoute, jsonRequest);
+    }
 
-        if (roomCreationRequest.error != null)
+    private IEnumerator SendRoomJoiningData()
+    {
+        string jsonRequest = $"{{\"PlayerName\": \"{PlayerName.text}\", \"WordKey\": \"{WordKeyToJoinRoom.text}\"}}";
+        return CreateRequest(roomJoiningRoute, jsonRequest);
+    }
+
+    private IEnumerator CreateRequest(string route, string jsonRequest)
+    {
+        UnityWebRequest request = new UnityWebRequest(route, "POST");
+        byte[] bodyRaw = Encoding.UTF8.GetBytes(jsonRequest);
+        request.uploadHandler = (UploadHandler)new UploadHandlerRaw(bodyRaw);
+        request.downloadHandler = (DownloadHandler)new DownloadHandlerBuffer();
+        request.SetRequestHeader("Content-Type", "application/json");
+        yield return request.SendWebRequest();
+
+        if (request.error != null)
         {
-            Debug.Log("An error has uccured: " + roomCreationRequest.error);
+            Debug.Log("An error has uccured: " + request.error);
         }
-        Debug.Log("Server response: " + roomCreationRequest);
-        Debug.Log("Server response: " + roomCreationRequest.result);
-        Debug.Log("Status code: " + roomCreationRequest.responseCode);
+        Debug.Log("Server response: " + request);
+        Debug.Log("Server response: " + request.result);
+        Debug.Log("Status code: " + request.responseCode);
     }
 }

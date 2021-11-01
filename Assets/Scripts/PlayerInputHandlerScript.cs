@@ -10,16 +10,16 @@ using UnityEngine.UI;
 public class PlayerInputHandlerScript : MonoBehaviour
 {
     [SerializeField]
-    private InputField PlayerName;
+    private InputField _playerName;
     [SerializeField]
-    private InputField WordKeyToCreateRoom;
+    private InputField _wordKeyToCreateRoom;
     [SerializeField]
-    private InputField WordKeyToJoinRoom;
+    private InputField _wordKeyToJoinRoom;
     [SerializeField]
-    private InputField PlayerNumber;
+    private InputField _playerNumber;
 
-    string roomCreationRoute = "http://localhost:5000/api/Home/create-room";
-    string roomJoiningRoute = "http://localhost:5000/api/Home/join-room";
+    private string _roomCreationRoute = "http://localhost:5000/api/Home/create-room";
+    private string _roomJoiningRoute = "http://localhost:5000/api/Home/join-room";
 
     public void SendRoomCreationRequest()
     {
@@ -33,14 +33,14 @@ public class PlayerInputHandlerScript : MonoBehaviour
 
     private IEnumerator SendRoomCreationData()
     {
-        string jsonRequest = $"{{\"PlayerName\": \"{PlayerName.text}\", \"WordKey\": \"{WordKeyToCreateRoom.text}\", \"PlayerNumber\": {PlayerNumber.text}}}";
-        return CreateRequest(roomCreationRoute, jsonRequest);
+        string jsonRequest = $"{{\"PlayerName\": \"{_playerName.text}\", \"WordKey\": \"{_wordKeyToCreateRoom.text}\", \"PlayerNumber\": {_playerNumber.text}}}";
+        return CreateRequest(_roomCreationRoute, jsonRequest);
     }
 
     private IEnumerator SendRoomJoiningData()
     {
-        string jsonRequest = $"{{\"PlayerName\": \"{PlayerName.text}\", \"WordKey\": \"{WordKeyToJoinRoom.text}\"}}";
-        return CreateRequest(roomJoiningRoute, jsonRequest);
+        string jsonRequest = $"{{\"PlayerName\": \"{_playerName.text}\", \"WordKey\": \"{_wordKeyToJoinRoom.text}\"}}";
+        return CreateRequest(_roomJoiningRoute, jsonRequest);
     }
 
     private IEnumerator CreateRequest(string route, string jsonRequest)

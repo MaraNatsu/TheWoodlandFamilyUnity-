@@ -1,31 +1,32 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using ValidationLibrary.Validators;
-using FluentValidation;
-using FluentValidation.Results;
-using EFDataAccessLibrary.Entities;
+//using UnityEngine;
+//using UnityEngine.UI;
+//using PlayerInputValidationLibrary.Validators;
+//using PlayerInputValidationLibrary.Models;
+//using System;
+//using FluentValidation.Results;
 
-public class ValidationScript : MonoBehaviour
-{
-    //Player player;
-    //Room room;
+//public class ValidationScript : MonoBehaviour
+//{
+//    [SerializeField]
+//    private InputField _nickname;
+//    [SerializeField]
+//    private InputField _wordKey;
+//    [SerializeField]
+//    private InputField _playerNumber;
 
-    //public ValidationScript(Player player, Room room)
-    //{
-    //    this.player = player;
-    //    this.room = room;
-    //}
+//    public ValidationResult ValidateNickname()
+//    {
+//        PlayerValidator validator = new PlayerValidator();
+//        return validator.Validate(_nickname.text);
+//    }
 
-    public ValidationResult ValidateNickname(Player player)
-    {
-        PlayerValidator validator = new PlayerValidator();
-        return validator.Validate(player);
-    }
+//    public ValidationResult ValidateWordkey()
+//    {
+//        RoomValidator validator = new RoomValidator();
+//        RoomModel room = new RoomModel();
+//        room.WordKey = _wordKey.text;
+//        room.PlayerNumber = Int32.Parse(_playerNumber.text);
 
-    public ValidationResult ValidateWordkey(Room room)
-    {
-        RoomValidator validator = new RoomValidator();
-        return validator.Validate(room);
-    }
-}
+//        return validator.Validate(room);
+//    }
+//}

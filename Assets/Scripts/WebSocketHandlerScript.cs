@@ -60,7 +60,7 @@ public class WebSocketHandlerScript : MonoBehaviour
         });
     }
 
-    private void OnPlayerJoined(JoinedPlayerOutputModel)
+    private void OnPlayerJoined(JoinedPlayerOutputModel joinedPlayer)
     {
 
     }

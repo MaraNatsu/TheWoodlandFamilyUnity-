@@ -24,7 +24,7 @@ namespace Assets.SignalRModels
                 OnMessageReceived?.Invoke(new SignalRMessage
                 {
                     PlayerName = player,
-                    Text = message,
+                    WordKey = message,
                 });
             });
             await StartConnectionAsync();
@@ -37,8 +37,8 @@ namespace Assets.SignalRModels
             try
             {
                 await _connection.InvokeAsync("SendMessage",
-                    message.PlayerName, message.Text);
-
+                    message.PlayerName, message.WordKey);
+                 
                 Debug.Log("InvokeAsync");
             }
             catch (Exception ex)

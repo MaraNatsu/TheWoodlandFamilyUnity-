@@ -13,40 +13,60 @@ public class WebSocketHandlerScript : MonoBehaviour
     private Text _receivedText;
     [SerializeField]
     private InputField _messageInput;
-    [SerializeField]
-    private Button _sendButton;
-    private SignalRConnector connector;
+    //[SerializeField]
+    //private Button _sendButton;
+    private SignalRConnector _connector;
 
     private string _serverUrl = "http://localhost:5000/chathub";
 
     public async Task Start()
     {
-        connector = new SignalRConnector();
-        connector.OnMessageReceived += UpdateReceivedMessages;
+        _connector = new SignalRConnector();
+        _connector.OnMessageReceived += UpdateJoinedPlayer;
+        //_connector.OnMessageReceived += UpdateReceivedMessages;
 
-        await connector.InitAsync(_serverUrl);
-        _sendButton.onClick.AddListener(SendMessage);
+        await _connector.InitAsync(_serverUrl);
+        //_sendButton.onClick.AddListener(SendMessage);
     }
 
-    private void UpdateReceivedMessages(SignalRMessage newMessage)
-    {
-        var lastMessages = _receivedText.text;
+    //private void UpdateReceivedMessages(SignalRMessage newMessage)
+    //{
+    //    var lastMessages = _receivedText.text;
 
-        if (string.IsNullOrEmpty(lastMessages) == false)
-        {
-            lastMessages += "\n";
-        }
+    //    if (string.IsNullOrEmpty(lastMessages) == false)
+    //    {
+    //        lastMessages += "\n";
+    //    }
          
-        lastMessages += $"User: {newMessage.PlayerName}, Message:{newMessage.Text}";
-        _receivedText.text = lastMessages;
+    //    lastMessages += $"User: {newMessage.PlayerName}, Message:{newMessage.WordKey}";
+    //    _receivedText.text = lastMessages;
+    //}
+
+    //private async void SendMessage()
+    //{
+    //    await _connector.SendMessageAsync(new SignalRMessage
+    //    {
+    //        PlayerName = "Example",
+    //        WordKey = _messageInput.text,
+    //    });
+    //}
+
+    public async void SendJoinedPlayer(PlayerToJoinInputModel playerToJoin)
+    {
+        await _connector.SendMessageAsync(new SignalRMessage
+        {
+            PlayerName = playerToJoin.PlayerName,
+            WordKey = playerToJoin.WordKey,
+        });
     }
 
-    private async void SendMessage()
+    private void OnPlayerJoined(JoinedPlayerOutputModel)
     {
-        await connector.SendMessageAsync(new SignalRMessage
-        {
-            PlayerName = "Example",
-            Text = _messageInput.text,
-        });
+
+    }
+
+    private void UpdateJoinedPlayer(SignalRMessage newMessage)
+    {
+
     }
 }

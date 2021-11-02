@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Assets.SignalRModels
 {
-    class SignalRMessage
+    public class PlayerToJoinInputModel
     {
         public string PlayerName { get; set; }
         public string WordKey { get; set; }

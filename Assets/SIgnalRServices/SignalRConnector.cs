@@ -4,12 +4,14 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 using Microsoft.AspNetCore.SignalR.Client;
+using Assets.SignalRModels;
 
-namespace Assets.SignalRModels
+namespace Assets.SignalRServices
 {
     class SignalRConnector
     {
-        public Action<SignalRMessage> OnMessageReceived;
+        public Action<JoinedPlayerOutputModel> OnPlayerJoined;
+        public Action OnAllPlayersConnected;
 
         private HubConnection _connection;
 
@@ -19,26 +21,35 @@ namespace Assets.SignalRModels
                     .WithUrl(serverUrl)
                     .Build();
 
-            _connection.On<string, string>("ReceiveMessage", (player, message) =>
+            //subscriber registration; subscriber: "JoinedPlayer", (joinedPlayer)
+            _connection.On<JoinedPlayerOutputModel>("JoinedPlayer", (joinedPlayer) =>
             {
-                OnMessageReceived?.Invoke(new SignalRMessage
+                OnPlayerJoined?.Invoke(new JoinedPlayerOutputModel
                 {
-                    PlayerName = player,
-                    WordKey = message,
+                    RoomId = joinedPlayer.RoomId,
+                    PlayerId = joinedPlayer.PlayerId,
+                    HealthCount = joinedPlayer.HealthCount,
+                    PlayerTurn = joinedPlayer.PlayerTurn,
                 });
             });
-            await StartConnectionAsync();
 
+            //subscriber registration; subscriber: "StartGame", ()
+            _connection.On("StartGame", () =>
+            {
+                OnAllPlayersConnected?.Invoke();
+            });
+
+            await StartConnectionAsync();
             Debug.Log("Start connection");
         }
 
-        public async Task SendMessageAsync(SignalRMessage message)
+        public async Task SendMessageAsync(PlayerToJoinInputModel playerToJoin)
         {
             try
             {
-                await _connection.InvokeAsync("SendMessage",
-                    message.PlayerName, message.WordKey);
-                 
+                await _connection.InvokeAsync("SendJoinedPlayer",
+                    playerToJoin);
+
                 Debug.Log("InvokeAsync");
             }
             catch (Exception ex)

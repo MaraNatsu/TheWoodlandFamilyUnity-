@@ -19,17 +19,22 @@ public class PlayerInputHandlerScript : MonoBehaviour
     private InputField _playerNumber;
 
     private string _roomCreationRoute = "http://localhost:5000/api/Home/create-room";
-    private string _roomJoiningRoute = "http://localhost:5000/api/Home/join-room";
+    //private string _roomJoiningRoute = "http://localhost:5000/api/Home/join-room";
+
+    public void ConvertCaseToUpper()
+    {
+        _playerName.text = _playerName.text.ToUpper();
+    }
 
     public void SendRoomCreationRequest()
     {
         StartCoroutine(SendRoomCreationData());
     }
 
-    public void SendRoomJoiningRequest()
-    {
-        StartCoroutine(SendRoomJoiningData());
-    }
+    //public void SendRoomJoiningRequest()
+    //{
+    //    StartCoroutine(SendRoomJoiningData());
+    //}
 
     private IEnumerator SendRoomCreationData()
     {
@@ -37,11 +42,11 @@ public class PlayerInputHandlerScript : MonoBehaviour
         return CreateRequest(_roomCreationRoute, jsonRequest);
     }
 
-    private IEnumerator SendRoomJoiningData()
-    {
-        string jsonRequest = $"{{\"PlayerName\": \"{_playerName.text}\", \"WordKey\": \"{_wordKeyToJoinRoom.text}\"}}";
-        return CreateRequest(_roomJoiningRoute, jsonRequest);
-    }
+    //private IEnumerator SendRoomJoiningData()
+    //{
+    //    string jsonRequest = $"{{\"PlayerName\": \"{_playerName.text}\", \"WordKey\": \"{_wordKeyToJoinRoom.text}\"}}";
+    //    return CreateRequest(_roomJoiningRoute, jsonRequest);
+    //}
 
     private IEnumerator CreateRequest(string route, string jsonRequest)
     {

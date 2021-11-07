@@ -756,7 +756,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _playerName: {fileID: 808985684}
   _wordKeyToCreateRoom: {fileID: 1039557480}
-  _wordKeyToJoinRoom: {fileID: 1049312231}
   _playerNumber: {fileID: 1213378411}
 --- !u!20 &519420031
 Camera:
@@ -1110,6 +1109,18 @@ MonoBehaviour:
       - m_Target: {fileID: 519420030}
         m_TargetAssemblyTypeName: PlayerInputHandlerScript, Assembly-CSharp
         m_MethodName: ConvertCaseToUpper
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 1921267623}
+        m_TargetAssemblyTypeName: WebSocketHandlerScript, Assembly-CSharp
+        m_MethodName: Start
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1811,19 +1822,7 @@ MonoBehaviour:
       m_Calls: []
   m_OnValueChanged:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 519420030}
-        m_TargetAssemblyTypeName: PlayerInputHandlerScript, Assembly-CSharp
-        m_MethodName: ConvertCaseToUpper
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
   m_CaretColor: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
   m_CustomCaretColor: 0
   m_SelectionColor: {r: 1, g: 1, b: 1, a: 1}
@@ -2081,6 +2080,30 @@ MonoBehaviour:
         m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
         m_MethodName: SetActive
         m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 519420030}
+        m_TargetAssemblyTypeName: PlayerInputHandlerScript, Assembly-CSharp
+        m_MethodName: SendRoomCreationRequest
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 1921267623}
+        m_TargetAssemblyTypeName: WebSocketHandlerScript, Assembly-CSharp
+        m_MethodName: SendJoiningPlayer
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -3006,6 +3029,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1921267622}
+  - component: {fileID: 1921267623}
   m_Layer: 5
   m_Name: RoomCreation
   m_TagString: Untagged
@@ -3035,6 +3059,20 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1921267623
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1921267621}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b5c465129160492479187d20af0cbfcf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _playerToJoinName: {fileID: 808985684}
+  _playerToJoinWordkey: {fileID: 1039557480}
 --- !u!1 &2023977411
 GameObject:
   m_ObjectHideFlags: 0

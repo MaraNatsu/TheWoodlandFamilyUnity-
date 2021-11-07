@@ -43,12 +43,11 @@ namespace Assets.SignalRServices
             Debug.Log("Start connection");
         }
 
-        public async Task SendMessageAsync(PlayerToJoinInputModel playerToJoin)
+        public async Task JoinPlayerAsync(PlayerToJoinInputModel playerToJoin)
         {
             try
             {
-                await _connection.InvokeAsync("SendJoinedPlayer",
-                    playerToJoin);
+                await _connection.InvokeAsync("SendJoinedPlayer", playerToJoin);
 
                 Debug.Log("InvokeAsync");
             }

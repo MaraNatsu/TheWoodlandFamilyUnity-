@@ -27,6 +27,13 @@ public class WebSocketHandlerScript : MonoBehaviour
 
     private string _serverUrl = "http://localhost:5000/chathub";
 
+    //public async void Start()
+    //{
+    //    await StartConnection();
+
+    //    Debug.Log("StartConnection()");
+    //}
+
     public async Task Start()
     {
         _connector = new SignalRConnector();
@@ -62,7 +69,7 @@ public class WebSocketHandlerScript : MonoBehaviour
 
     public async void SendJoiningPlayer()
     {
-        await _connector.SendMessageAsync(new PlayerToJoinInputModel
+        await _connector.JoinPlayerAsync(new PlayerToJoinInputModel
         {
             PlayerName = _playerToJoinName.text,
             WordKey = _playerToJoinWordkey.text,

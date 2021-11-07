@@ -1,8 +1,5 @@
 using System.Collections;
-using System.Collections.Generic;
-using System.Net.Http;
 using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.UI;
@@ -14,12 +11,9 @@ public class PlayerInputHandlerScript : MonoBehaviour
     [SerializeField]
     private InputField _wordKeyToCreateRoom;
     [SerializeField]
-    private InputField _wordKeyToJoinRoom;
-    [SerializeField]
     private InputField _playerNumber;
 
     private string _roomCreationRoute = "http://localhost:5000/api/Home/create-room";
-    //private string _roomJoiningRoute = "http://localhost:5000/api/Home/join-room";
 
     public void ConvertCaseToUpper()
     {
@@ -31,22 +25,12 @@ public class PlayerInputHandlerScript : MonoBehaviour
         StartCoroutine(SendRoomCreationData());
     }
 
-    //public void SendRoomJoiningRequest()
-    //{
-    //    StartCoroutine(SendRoomJoiningData());
-    //}
-
     private IEnumerator SendRoomCreationData()
     {
-        string jsonRequest = $"{{\"PlayerName\": \"{_playerName.text}\", \"WordKey\": \"{_wordKeyToCreateRoom.text}\", \"PlayerNumber\": {_playerNumber.text}}}";
+        //string jsonRequest = $"{{\"PlayerName\": \"{_playerName.text}\", \"WordKey\": \"{_wordKeyToCreateRoom.text}\", \"PlayerNumber\": {_playerNumber.text}}}";
+        string jsonRequest = $"{{\"WordKey\": \"{_wordKeyToCreateRoom.text}\", \"PlayerNumber\": {_playerNumber.text}}}";
         return CreateRequest(_roomCreationRoute, jsonRequest);
     }
-
-    //private IEnumerator SendRoomJoiningData()
-    //{
-    //    string jsonRequest = $"{{\"PlayerName\": \"{_playerName.text}\", \"WordKey\": \"{_wordKeyToJoinRoom.text}\"}}";
-    //    return CreateRequest(_roomJoiningRoute, jsonRequest);
-    //}
 
     private IEnumerator CreateRequest(string route, string jsonRequest)
     {

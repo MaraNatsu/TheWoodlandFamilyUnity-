@@ -13,6 +13,8 @@ public class PlayerInputHandlerScript : MonoBehaviour
     [SerializeField]
     private InputField _playerNumber;
     [SerializeField]
+    private GameObject _roomJoiningForCreator;
+    [SerializeField]
     private Text _welcomingText;
 
     private string _roomCreationRoute = "http://localhost:5000/api/Home/create-room";
@@ -27,6 +29,8 @@ public class PlayerInputHandlerScript : MonoBehaviour
         string welcome = $"Welcome, {_playerName.text}!";
         string roomCreationResult = "Your room has been created succesfully.";
         _welcomingText.text = (welcome + '\n' + '\n' + roomCreationResult).ToUpper();
+
+        _roomJoiningForCreator.SetActive(true);
     }
 
     public void SendRoomCreationRequest()
@@ -54,6 +58,9 @@ public class PlayerInputHandlerScript : MonoBehaviour
         {
             Debug.Log("An error has uccured: " + request.error);
         }
+
+        WelcomePlayer();
+
         Debug.Log("Server response: " + request);
         Debug.Log("Server response: " + request.result);
         Debug.Log("Status code: " + request.responseCode);

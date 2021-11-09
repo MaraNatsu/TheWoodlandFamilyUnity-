@@ -12,12 +12,21 @@ public class PlayerInputHandlerScript : MonoBehaviour
     private InputField _wordKeyToCreateRoom;
     [SerializeField]
     private InputField _playerNumber;
+    [SerializeField]
+    private Text _welcomingText;
 
     private string _roomCreationRoute = "http://localhost:5000/api/Home/create-room";
 
     public void ConvertCaseToUpper()
     {
         _playerName.text = _playerName.text.ToUpper();
+    }
+
+    public void WelcomePlayer()
+    {
+        string welcome = $"Welcome, {_playerName.text}!";
+        string roomCreationResult = "Your room has been created succesfully.";
+        _welcomingText.text = (welcome + '\n' + '\n' + roomCreationResult).ToUpper();
     }
 
     public void SendRoomCreationRequest()

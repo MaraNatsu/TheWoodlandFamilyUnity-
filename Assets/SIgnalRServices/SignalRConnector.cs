@@ -5,21 +5,43 @@ using System.Threading.Tasks;
 using UnityEngine;
 using Microsoft.AspNetCore.SignalR.Client;
 using Assets.SignalRModels;
+using Microsoft.AspNetCore.Http.Connections;
 
 namespace Assets.SignalRServices
 {
     class SignalRConnector
     {
+        public static SignalRConnector instance = null;
+
         public Action<JoinedPlayerOutputModel> OnPlayerJoined;
         public Action OnAllPlayersConnected;
 
         private HubConnection _connection;
 
+        private SignalRConnector()
+        {
+
+        }
+
+        public static SignalRConnector GetInstance()
+        {
+            if (instance == null)
+            {
+                instance = new SignalRConnector();
+                return instance;
+            }
+
+            return instance;
+        }
+
         public async Task InitAsync(string serverUrl)
         {
             _connection = new HubConnectionBuilder()
-                    .WithUrl(serverUrl)
+                    .WithUrl(serverUrl, HttpTransportType.WebSockets)
                     .Build();
+
+//            _connection.HandshakeTimeout = new TimeSpan(10000);
+
 
             //subscriber registration; subscriber: "JoinedPlayer", (joinedPlayer)
             _connection.On<JoinedPlayerOutputModel>("JoinedPlayer", (joinedPlayer) =>
@@ -39,8 +61,15 @@ namespace Assets.SignalRServices
                 OnAllPlayersConnected?.Invoke();
             });
 
+            _connection.Closed += Disconnect;
+
             await StartConnectionAsync();
             Debug.Log("Start connection");
+        }
+
+        public async Task Disconnect(Exception ex)
+        {
+            Debug.Log("Disconnected: " + ex);
         }
 
         public async Task JoinPlayerAsync(PlayerToJoinInputModel playerToJoin)
@@ -68,6 +97,7 @@ namespace Assets.SignalRServices
             catch (Exception ex)
             {
                 Debug.LogError($"Error {ex.Message}");
+                Debug.LogError($"Error {ex.StackTrace}");
             }
         }
     }

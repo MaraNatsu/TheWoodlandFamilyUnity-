@@ -36,6 +36,7 @@ public class PlayerInputHandlerScript : MonoBehaviour
     public void SendRoomCreationRequest()
     {
         StartCoroutine(SendRoomCreationData());
+        Debug.Log("Start Coroutine");
     }
 
     private IEnumerator SendRoomCreationData()

@@ -19,12 +19,14 @@ public class WebSocketHandlerScript : MonoBehaviour
     //private Button _sendButton;
 
     [SerializeField]
-    private InputField _playerToJoinName;
+    private InputField _playerName;
     [SerializeField]
-    private InputField _playerToJoinWordkey;
+    private InputField _wordKeyOnCreation;
+    [SerializeField]
+    private InputField _wordKeyOnJoining;
 
+    private string _wordKey;
     private SignalRConnector _connector;
-
     private string _serverUrl = "http://localhost:5000/chathub";
 
     //public async void Start()
@@ -34,9 +36,9 @@ public class WebSocketHandlerScript : MonoBehaviour
     //    Debug.Log("StartConnection()");
     //}
 
-    public async Task Start()
+    async Task Start()
     {
-        _connector = new SignalRConnector();
+        _connector = SignalRConnector.GetInstance();
         _connector.OnPlayerJoined += SavePlayerData;
         _connector.OnAllPlayersConnected += LoadGameScene;
         //_connector.OnMessageReceived += UpdateReceivedMessages;
@@ -69,10 +71,19 @@ public class WebSocketHandlerScript : MonoBehaviour
 
     public async void SendJoiningPlayer()
     {
+        if (_wordKeyOnCreation.text != "")
+        {
+            _wordKey = _wordKeyOnCreation.text;
+        }
+        else
+        {
+            _wordKey = _wordKeyOnJoining.text;
+        }
+
         await _connector.JoinPlayerAsync(new PlayerToJoinInputModel
         {
-            PlayerName = _playerToJoinName.text,
-            WordKey = _playerToJoinWordkey.text,
+            PlayerName = _playerName.text,
+            WordKey = _wordKey,
         });
     }
 

@@ -11,63 +11,31 @@ using UnityEngine.SceneManagement;
 
 public class WebSocketHandlerScript : MonoBehaviour
 {
-    //[SerializeField]
-    //private Text _receivedText;
-    //[SerializeField]
-    //private InputField _messageInput;
-    //[SerializeField]
-    //private Button _sendButton;
-
     [SerializeField]
     private InputField _playerName;
     [SerializeField]
     private InputField _wordKeyOnCreation;
     [SerializeField]
     private InputField _wordKeyOnJoining;
+    [SerializeField]
+    private GameObject _newPlayerName;
+
+    private SignalRConnector _connector;
 
     private string _wordKey;
-    private SignalRConnector _connector;
-    private string _serverUrl = "http://localhost:5000/chathub";
-
-    //public async void Start()
-    //{
-    //    await StartConnection();
-
-    //    Debug.Log("StartConnection()");
-    //}
+    private PlayerOutputModel joinedPlayer;
 
     async Task Start()
     {
         _connector = SignalRConnector.GetInstance();
         _connector.OnPlayerJoined += SavePlayerData;
+        _connector.OnNewPlayerGot += ShowNewPlayer;
         _connector.OnAllPlayersConnected += LoadGameScene;
         //_connector.OnMessageReceived += UpdateReceivedMessages;
 
-        await _connector.InitAsync(_serverUrl);
+        await _connector.InitAsync();
         //_sendButton.onClick.AddListener(SendMessage);
     }
-
-    //private void UpdateReceivedMessages(SignalRMessage newMessage)
-    //{
-    //    var lastMessages = _receivedText.text;
-
-    //    if (string.IsNullOrEmpty(lastMessages) == false)
-    //    {
-    //        lastMessages += "\n";
-    //    }
-
-    //    lastMessages += $"User: {newMessage.PlayerName}, Message:{newMessage.WordKey}";
-    //    _receivedText.text = lastMessages;
-    //}
-
-    //private async void SendMessage()
-    //{
-    //    await _connector.SendMessageAsync(new SignalRMessage
-    //    {
-    //        PlayerName = "Example",
-    //        WordKey = _messageInput.text,
-    //    });
-    //}
 
     public async void SendJoiningPlayer()
     {
@@ -87,9 +55,19 @@ public class WebSocketHandlerScript : MonoBehaviour
         });
     }
 
-    private void SavePlayerData(JoinedPlayerOutputModel joinedPlayer)
+    private void ShowNewPlayer(string playerName, int playerNumber)
     {
 
+    }
+
+    private void DisconnectPlayer(int playerId)
+    {
+
+    }
+
+    private void SavePlayerData(PlayerOutputModel joinedPlayer)
+    {
+        Debug.Log("Recive server response for one client.");
     }
 
     private void LoadGameScene()

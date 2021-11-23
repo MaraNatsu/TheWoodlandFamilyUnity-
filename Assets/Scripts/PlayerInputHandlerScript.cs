@@ -3,6 +3,7 @@ using Assets.SIgnalRServices;
 using System;
 using System.Collections;
 using System.Text;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.UI;
@@ -52,7 +53,6 @@ public class PlayerInputHandlerScript : MonoBehaviour
     {
         _loader.SetActive(false);
         _waitingScreen.SetActive(true);
-
     }
 
     public void SendRoomCreationRequest()
@@ -69,7 +69,7 @@ public class PlayerInputHandlerScript : MonoBehaviour
 
     private IEnumerator SendRoomCreationData()
     {
-        string jsonRequest = $"{{\"WordKey\": \"{_wordKeyToCreateRoom.text}\", \"PlayerNumber\": {_playerNumber.text}}}";
+        string jsonRequest = $"{{\"Wordkey\": \"{_wordKeyToCreateRoom.text}\", \"PlayerNumber\": {_playerNumber.text}}}";
         yield return CreateRequest(_roomCreationRoute, jsonRequest);
 
         GiveRoomCreationResult();
@@ -87,7 +87,7 @@ public class PlayerInputHandlerScript : MonoBehaviour
             _wordKey = _wordKeyToJoinRoom.text;
         }
 
-        string jsonRequest = $"{{\"PlayerName\": \"{_playerName.text}\", \"WordKey\": \"{_wordKey}\"}}";
+        string jsonRequest = $"{{\"Name\": \"{_playerName.text}\", \"Wordkey\": \"{_wordKey}\"}}";
         yield return CreateRequest(_playerCreationRoute, jsonRequest, (requestResponse) =>
         {
             GameDataStorage.CurrentClient = Newtonsoft.Json.JsonConvert.DeserializeObject<ClientDataModel>(requestResponse);

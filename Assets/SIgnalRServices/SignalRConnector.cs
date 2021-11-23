@@ -16,6 +16,7 @@ namespace Assets.SignalRServices
         private string _serverUrl = "http://localhost:5000/gamehub";
 
         public Action<PlayerOutputModel> OnPlayerConnected;
+        public Action<int> OnPlayerDisconnected;
         public Action OnAllPlayersConnected;
 
         private HubConnection _connection;
@@ -43,15 +44,15 @@ namespace Assets.SignalRServices
                     .WithAutomaticReconnect()
                     .Build();
 
-            //subscriber registration; subscriber: "ConnectedPlayer", (connectedPlayer)
+            //subscriber registration; subscriber: "ShowConnectedPlayer", (connectedPlayer)
             _connection.On<PlayerOutputModel>("ShowConnectedPlayer", (connectedPlayer) =>
             {
                 OnPlayerConnected?.Invoke(connectedPlayer);
             });
 
             _connection.On<int>("DisconnectPlayer", (playerId) =>
-            { 
-
+            {
+                OnPlayerDisconnected?.Invoke(playerId);
             });
 
             //subscriber registration; subscriber: "StartGame", ()
@@ -77,10 +78,11 @@ namespace Assets.SignalRServices
             {
                 await _connection.InvokeAsync("SendConnectedPlayer", playerToConnect);
 
-                Debug.Log("InvokeAsync \"SendJoinedPlayer\"");
+                Debug.Log("InvokeAsync \"SendConnectedPlayer\"");
             }
             catch (Exception ex)
             {
+                Debug.Log("SendConnectedPlayer Error: " + ex.Message);
                 Debug.LogError($"Error {ex.Message}");
             }
         }

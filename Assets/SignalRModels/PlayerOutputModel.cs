@@ -8,7 +8,7 @@ namespace Assets.SignalRModels
 {
     public class PlayerOutputModel
     {
-        public int PlayerId { get; set; }
+        public int Id { get; set; }
         public string PlayerName { get; set; }
     }
 }

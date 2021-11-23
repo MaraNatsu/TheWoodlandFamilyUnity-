@@ -9,71 +9,62 @@ using Assets.SignalRModels;
 using Assets.SignalRServices;
 using UnityEngine.SceneManagement;
 using Assets.SIgnalRServices;
+using System.Linq;
 
 public class WebSocketHandlerScript : MonoBehaviour
 {
     [SerializeField]
-    private InputField _playerName;
-    [SerializeField]
-    private InputField _wordKeyOnCreation;
-    [SerializeField]
-    private InputField _wordKeyOnJoining;
-    [SerializeField]
     private GameObject _newPlayer;
+    [SerializeField]
+    private GameObject _waitingScreen;
 
     private SignalRConnector _connector;
     private ConnectedPlayersHolder _holder = new ConnectedPlayersHolder();
 
-    private string _wordKey;
-
     async Task Start()
     {
         _holder.FillHolder(_newPlayer, GameDataStorage.CurrentClient.PlayerNumber);
-        _connector = SignalRConnector.GetInstance();
-        SendConnectingPlayer();
 
+        foreach (var connectedPlayer in _holder.ConnectedPlayersView)
+        {
+            Instantiate(connectedPlayer, _waitingScreen.transform);
+        }
+
+        _connector = SignalRConnector.GetInstance();
         _connector.OnPlayerConnected += ShowConnectedPlayer;
+        _connector.OnPlayerDisconnected += DisconnectPlayer;
         _connector.OnAllPlayersConnected += LoadGameScene;
-        //_connector.OnMessageReceived += UpdateReceivedMessages;
 
         await _connector.InitAsync();
-        //_sendButton.onClick.AddListener(SendMessage);
+        SendConnectingPlayer();
     }
 
     private async void SendConnectingPlayer()
     {
-        if (_wordKeyOnCreation.text != "")
-        {
-            _wordKey = _wordKeyOnCreation.text;
-        }
-        else
-        {
-            _wordKey = _wordKeyOnJoining.text;
-        }
-
         await _connector.ConnectPlayerAsync(new PlayerToConnectInputModel
         {
             Id = GameDataStorage.CurrentClient.PlayerId,
             Name = GameDataStorage.CurrentClient.PlayerName,
-            Wordkey = _wordKey,
+            Wordkey = GameDataStorage.CurrentClient.Wordkey,
         });
-    }
-
-    private void ShowNewPlayer(string playerName, int playerNumber)
-    {
-
-    }
-
-    private void DisconnectPlayer(int playerId)
-    {
-         
-
-        Debug.Log("Disconnected: " + playerId);
     }
 
     private void ShowConnectedPlayer(PlayerOutputModel connectedPlayer)
     {
-        
+        _holder.ConnectPlayer(connectedPlayer);
+        Debug.Log("Displayed: " + connectedPlayer.PlayerName + ", " + connectedPlayer.Id);
+    }
+
+    private void DisconnectPlayer(int playerId)
+    {
+        PlayerOutputModel playerToDisconnect = _holder
+            .ConnectedPlayers
+            .Where(player => player.Id == playerId)
+            .FirstOrDefault();
+
+        _holder.DisconnectPlayer(playerToDisconnect);
+
+        Debug.Log("Disconnected: " + playerId);
     }
 
     private void LoadGameScene()

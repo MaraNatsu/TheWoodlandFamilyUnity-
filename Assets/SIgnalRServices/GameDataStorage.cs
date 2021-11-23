@@ -9,6 +9,6 @@ namespace Assets.SIgnalRServices
 {
     class GameDataStorage
     {
-        public static PlayerOutputModel CurrentPlayer { get; set; }
+        public static ClientDataModel CurrentClient { get; set; }
     }
 }

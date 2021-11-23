@@ -15,12 +15,10 @@ namespace Assets.SignalRServices
         public static SignalRConnector instance = null;
         private string _serverUrl = "http://localhost:5000/gamehub";
 
-        public Action<PlayerOutputModel> OnPlayerJoined;
-        public Action<string, int> OnNewPlayerGot;
+        public Action<PlayerOutputModel> OnPlayerConnected;
         public Action OnAllPlayersConnected;
 
         private HubConnection _connection;
-        private ConnectedPlayersHolder _holder = new ConnectedPlayersHolder();
 
         private SignalRConnector()
         {
@@ -41,27 +39,14 @@ namespace Assets.SignalRServices
         public async Task InitAsync()
         {
             _connection = new HubConnectionBuilder()
-                    .WithUrl($"http://localhost:5000/gamehub?playerId={GameDataStorage.CurrentPlayer.PlayerId}", HttpTransportType.WebSockets)
+                    .WithUrl($"http://localhost:5000/gamehub?playerId={GameDataStorage.CurrentClient.PlayerId}", HttpTransportType.WebSockets)
                     .WithAutomaticReconnect()
                     .Build();
 
-            //subscriber registration; subscriber: "JoinedPlayer", (joinedPlayer)
-            _connection.On<PlayerOutputModel>("JoinedPlayer", (joinedPlayer) =>
+            //subscriber registration; subscriber: "ConnectedPlayer", (connectedPlayer)
+            _connection.On<PlayerOutputModel>("ShowConnectedPlayer", (connectedPlayer) =>
             {
-                OnPlayerJoined?.Invoke(new PlayerOutputModel
-                {
-                    RoomId = joinedPlayer.RoomId,
-                    PlayerId = joinedPlayer.PlayerId,
-                    PlayerName = joinedPlayer.PlayerName,
-                    HealthCount = joinedPlayer.HealthCount,
-                    PlayerTurn = joinedPlayer.PlayerTurn,
-                });
-            });
-
-            //subscriber registration; subscriber: "GetNewPlayer", ()
-            _connection.On<string, int>("GetNewPlayer", (newPlayerName, totalPlayerNumber) =>
-            {
-                //OnNewPlayerGot?.Invoke(_holder.FillHolder(newPlayerName, totalPlayerNumber));
+                OnPlayerConnected?.Invoke(connectedPlayer);
             });
 
             _connection.On<int>("DisconnectPlayer", (playerId) =>
@@ -86,11 +71,11 @@ namespace Assets.SignalRServices
             Debug.Log("Disconnected: " + ex);
         }
 
-        public async Task JoinPlayerAsync(PlayerToJoinInputModel playerToJoin)
+        public async Task ConnectPlayerAsync(PlayerToConnectInputModel playerToConnect)
         {
             try
             {
-                await _connection.InvokeAsync("SendJoinedPlayer", playerToJoin);
+                await _connection.InvokeAsync("SendConnectedPlayer", playerToConnect);
 
                 Debug.Log("InvokeAsync \"SendJoinedPlayer\"");
             }

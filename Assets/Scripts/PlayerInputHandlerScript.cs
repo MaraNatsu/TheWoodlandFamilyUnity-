@@ -17,6 +17,7 @@ public class PlayerInputHandlerScript : MonoBehaviour
     private InputField _wordKeyToJoinRoom;
     [SerializeField]
     private InputField _playerNumber;
+
     [SerializeField]
     private Text _roomCreationResult;
     private string _wordKey;
@@ -31,9 +32,9 @@ public class PlayerInputHandlerScript : MonoBehaviour
     private string _roomCreationRoute = "http://localhost:5000/api/Home/create-room";
     private string _playerCreationRoute = "http://localhost:5000/api/Home/create-player";
 
-    public void ConvertCaseToUpper()
+    public void ConvertCaseToUpper(InputField inputField)
     {
-        _playerName.text = _playerName.text.ToUpper();
+        inputField.text = inputField.text.ToUpper();
     }
 
     public void GiveRoomCreationResult()
@@ -51,6 +52,7 @@ public class PlayerInputHandlerScript : MonoBehaviour
     {
         _loader.SetActive(false);
         _waitingScreen.SetActive(true);
+
     }
 
     public void SendRoomCreationRequest()
@@ -88,7 +90,7 @@ public class PlayerInputHandlerScript : MonoBehaviour
         string jsonRequest = $"{{\"PlayerName\": \"{_playerName.text}\", \"WordKey\": \"{_wordKey}\"}}";
         yield return CreateRequest(_playerCreationRoute, jsonRequest, (requestResponse) =>
         {
-            GameDataStorage.CurrentPlayer = Newtonsoft.Json.JsonConvert.DeserializeObject<PlayerOutputModel>(requestResponse);
+            GameDataStorage.CurrentClient = Newtonsoft.Json.JsonConvert.DeserializeObject<ClientDataModel>(requestResponse);
         });
 
         GivePlayerCreationResult();

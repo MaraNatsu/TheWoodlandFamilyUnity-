@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.SignalR.Client;
 using Assets.SignalRModels;
 using Assets.SignalRServices;
 using UnityEngine.SceneManagement;
+using Assets.SIgnalRServices;
 
 public class WebSocketHandlerScript : MonoBehaviour
 {
@@ -18,18 +19,20 @@ public class WebSocketHandlerScript : MonoBehaviour
     [SerializeField]
     private InputField _wordKeyOnJoining;
     [SerializeField]
-    private GameObject _newPlayerName;
+    private GameObject _newPlayer;
 
     private SignalRConnector _connector;
+    private ConnectedPlayersHolder _holder = new ConnectedPlayersHolder();
 
     private string _wordKey;
-    private PlayerOutputModel joinedPlayer;
 
     async Task Start()
     {
+        _holder.FillHolder(_newPlayer, GameDataStorage.CurrentClient.PlayerNumber);
         _connector = SignalRConnector.GetInstance();
-        _connector.OnPlayerJoined += SavePlayerData;
-        _connector.OnNewPlayerGot += ShowNewPlayer;
+        SendConnectingPlayer();
+
+        _connector.OnPlayerConnected += ShowConnectedPlayer;
         _connector.OnAllPlayersConnected += LoadGameScene;
         //_connector.OnMessageReceived += UpdateReceivedMessages;
 
@@ -37,7 +40,7 @@ public class WebSocketHandlerScript : MonoBehaviour
         //_sendButton.onClick.AddListener(SendMessage);
     }
 
-    public async void SendJoiningPlayer()
+    private async void SendConnectingPlayer()
     {
         if (_wordKeyOnCreation.text != "")
         {
@@ -48,10 +51,11 @@ public class WebSocketHandlerScript : MonoBehaviour
             _wordKey = _wordKeyOnJoining.text;
         }
 
-        await _connector.JoinPlayerAsync(new PlayerToJoinInputModel
+        await _connector.ConnectPlayerAsync(new PlayerToConnectInputModel
         {
-            PlayerName = _playerName.text,
-            WordKey = _wordKey,
+            Id = GameDataStorage.CurrentClient.PlayerId,
+            Name = GameDataStorage.CurrentClient.PlayerName,
+            Wordkey = _wordKey,
         });
     }
 
@@ -62,12 +66,14 @@ public class WebSocketHandlerScript : MonoBehaviour
 
     private void DisconnectPlayer(int playerId)
     {
+         
 
+        Debug.Log("Disconnected: " + playerId);
     }
 
-    private void SavePlayerData(PlayerOutputModel joinedPlayer)
+    private void ShowConnectedPlayer(PlayerOutputModel connectedPlayer)
     {
-        Debug.Log("Recive server response for one client.");
+        
     }
 
     private void LoadGameScene()

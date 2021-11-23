@@ -893,7 +893,7 @@ MonoBehaviour:
   _playerName: {fileID: 808985684}
   _wordKeyOnCreation: {fileID: 1039557480}
   _wordKeyOnJoining: {fileID: 1049312231}
-  _newPlayerName: {fileID: 3688719460496408308, guid: 660427c62149015459bfc98b7d10fbe8, type: 3}
+  _newPlayer: {fileID: 0}
 --- !u!1 &656725283
 GameObject:
   m_ObjectHideFlags: 0
@@ -1232,10 +1232,10 @@ MonoBehaviour:
       - m_Target: {fileID: 519420030}
         m_TargetAssemblyTypeName: PlayerInputHandlerScript, Assembly-CSharp
         m_MethodName: ConvertCaseToUpper
-        m_Mode: 1
+        m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_ObjectArgument: {fileID: 808985684}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.UI.InputField, UnityEngine.UI
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 

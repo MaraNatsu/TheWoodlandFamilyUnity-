@@ -15,7 +15,7 @@ namespace Assets.SignalRServices
         public static SignalRConnector instance = null;
         private string _serverUrl = "http://localhost:5000/gamehub";
 
-        public Action<PlayerOutputModel> OnPlayerConnected;
+        public Action<List<PlayerOutputModel>> OnPlayerConnected;
         public Action<int> OnPlayerDisconnected;
         public Action OnAllPlayersConnected;
 
@@ -45,9 +45,9 @@ namespace Assets.SignalRServices
                     .Build();
 
             //subscriber registration; subscriber: "ShowConnectedPlayer", (connectedPlayer)
-            _connection.On<PlayerOutputModel>("ShowConnectedPlayer", (connectedPlayer) =>
+            _connection.On<List<PlayerOutputModel>>("ShowConnectedPlayers", (connectedPlayers) =>
             {
-                OnPlayerConnected?.Invoke(connectedPlayer);
+                OnPlayerConnected?.Invoke(connectedPlayers);
             });
 
             _connection.On<int>("DisconnectPlayer", (playerId) =>
@@ -76,9 +76,9 @@ namespace Assets.SignalRServices
         {
             try
             {
-                await _connection.InvokeAsync("SendConnectedPlayer", playerToConnect);
+                await _connection.InvokeAsync("SendConnectedPlayers", playerToConnect);
 
-                Debug.Log("InvokeAsync \"SendConnectedPlayer\"");
+                Debug.Log("InvokeAsync \"SendConnectedPlayers\"");
             }
             catch (Exception ex)
             {

@@ -23,15 +23,15 @@ public class WebSocketHandlerScript : MonoBehaviour
 
     async Task Start()
     {
-        _holder.FillHolder(_newPlayer, GameDataStorage.CurrentClient.PlayerNumber);
+        _holder.FillHolder(_newPlayer, _waitingScreen, GameDataStorage.CurrentClient.PlayerNumber);
 
-        foreach (var connectedPlayer in _holder.ConnectedPlayersView)
-        {
-            Instantiate(connectedPlayer, _waitingScreen.transform);
-        }
+        //foreach (var connectedPlayer in _holder.ConnectedPlayersView)
+        //{
+        //    Instantiate(connectedPlayer, _waitingScreen.transform);
+        //}
 
         _connector = SignalRConnector.GetInstance();
-        _connector.OnPlayerConnected += ShowConnectedPlayer;
+        _connector.OnPlayerConnected += ShowConnectedPlayers;
         _connector.OnPlayerDisconnected += DisconnectPlayer;
         _connector.OnAllPlayersConnected += LoadGameScene;
 
@@ -49,21 +49,15 @@ public class WebSocketHandlerScript : MonoBehaviour
         });
     }
 
-    private void ShowConnectedPlayer(PlayerOutputModel connectedPlayer)
+    private void ShowConnectedPlayers(List<PlayerOutputModel> connectedPlayers)
     {
-        _holder.ConnectPlayer(connectedPlayer);
-        Debug.Log("Displayed: " + connectedPlayer.PlayerName + ", " + connectedPlayer.Id);
+        _holder.ConnectPlayer(connectedPlayers);
+        Debug.Log("Displayed all connected players");
     }
 
     private void DisconnectPlayer(int playerId)
     {
-        PlayerOutputModel playerToDisconnect = _holder
-            .ConnectedPlayers
-            .Where(player => player.Id == playerId)
-            .FirstOrDefault();
-
-        _holder.DisconnectPlayer(playerToDisconnect);
-
+        _holder.DisconnectPlayer(playerId);
         Debug.Log("Disconnected: " + playerId);
     }
 

@@ -15,7 +15,8 @@ namespace Assets.SignalRServices
         public static SignalRConnector instance = null;
         private string _serverUrl = "http://localhost:5000/gamehub";
 
-        public Action<List<PlayerOutputModel>> OnPlayerConnected;
+        public Action<List<PlayerOutputModel>> OnConnectionStarted;
+        //public Action<PlayerOutputModel> OnPlayerConnected;
         public Action<int> OnPlayerDisconnected;
         public Action OnAllPlayersConnected;
 
@@ -44,13 +45,26 @@ namespace Assets.SignalRServices
                     .WithAutomaticReconnect()
                     .Build();
 
-            //subscriber registration; subscriber: "ShowConnectedPlayer", (connectedPlayer)
-            _connection.On<List<PlayerOutputModel>>("ShowConnectedPlayers", (connectedPlayers) =>
+            _connection.Reconnecting += error =>
             {
-                OnPlayerConnected?.Invoke(connectedPlayers);
+                Debug.Assert(_connection.State == HubConnectionState.Reconnecting);
+                Debug.Log("Reconnecting: " + error.Message);
+
+                return Task.CompletedTask;
+            };
+
+            //subscriber registration; subscriber: "ShowConnectedPlayer", (connectedPlayer)
+            _connection.On<List<PlayerOutputModel>>("GetConnectedPlayers", (connectedPlayers) =>
+            {
+                OnConnectionStarted?.Invoke(connectedPlayers);
             });
 
-            _connection.On<int>("DisconnectPlayer", (playerId) =>
+            //_connection.On<PlayerOutputModel>("AddConnectedPlayer", (connectedPlayer) =>
+            //{
+            //    OnPlayerConnected?.Invoke(connectedPlayer);
+            //});
+
+            _connection.On<int>("RemoveDisconnectedPlayer", (playerId) =>
             {
                 OnPlayerDisconnected?.Invoke(playerId);
             });
@@ -72,20 +86,20 @@ namespace Assets.SignalRServices
             Debug.Log("Disconnected: " + ex);
         }
 
-        public async Task ConnectPlayerAsync(PlayerToConnectInputModel playerToConnect)
-        {
-            try
-            {
-                await _connection.InvokeAsync("SendConnectedPlayers", playerToConnect);
+        //public async Task ConnectPlayerAsync(PlayerToConnectInputModel playerToConnect)
+        //{
+        //    try
+        //    {
+        //        await _connection.InvokeAsync("SendConnectedPlayer", playerToConnect);
 
-                Debug.Log("InvokeAsync \"SendConnectedPlayers\"");
-            }
-            catch (Exception ex)
-            {
-                Debug.Log("SendConnectedPlayer Error: " + ex.Message);
-                Debug.LogError($"Error {ex.Message}");
-            }
-        }
+        //        Debug.Log("InvokeAsync \"SendConnectedPlayer\"");
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Debug.Log("SendConnectedPlayer Error: " + ex.Message);
+        //        Debug.LogError($"Error {ex.Message}");
+        //    }
+        //}
 
         private async Task StartConnectionAsync()
         {

@@ -31,31 +31,45 @@ public class WebSocketHandlerScript : MonoBehaviour
         //}
 
         _connector = SignalRConnector.GetInstance();
-        _connector.OnPlayerConnected += ShowConnectedPlayers;
-        _connector.OnPlayerDisconnected += DisconnectPlayer;
+        //_connector.OnPlayerConnected += ShowConnectedPlayers;
+        _connector.OnConnectionStarted += GetConnectedPlayers;
+       // _connector.OnPlayerConnected += AddConnectedPlayer;
+        _connector.OnPlayerDisconnected += RemoveDisconnectedPlayer;
         _connector.OnAllPlayersConnected += LoadGameScene;
 
         await _connector.InitAsync();
-        SendConnectingPlayer();
+        //SendConnectingPlayer();
     }
 
-    private async void SendConnectingPlayer()
+    //private async void SendConnectingPlayer()
+    //{
+    //    await _connector.ConnectPlayerAsync(new PlayerToConnectInputModel
+    //    {
+    //        Id = GameDataStorage.CurrentClient.PlayerId,
+    //        Name = GameDataStorage.CurrentClient.PlayerName,
+    //        Wordkey = GameDataStorage.CurrentClient.Wordkey,
+    //    });
+    //}
+
+    //private void ShowConnectedPlayers(List<PlayerOutputModel> connectedPlayers)
+    //{
+    //    _holder.ConnectPlayer(connectedPlayers);
+    //    Debug.Log("Displayed all connected players");
+    //}
+
+    private void GetConnectedPlayers(List<PlayerOutputModel> connectedPlayers)
     {
-        await _connector.ConnectPlayerAsync(new PlayerToConnectInputModel
-        {
-            Id = GameDataStorage.CurrentClient.PlayerId,
-            Name = GameDataStorage.CurrentClient.PlayerName,
-            Wordkey = GameDataStorage.CurrentClient.Wordkey,
-        });
+        _holder.UpdateConnections(connectedPlayers);
+        Debug.Log("All connected players are displayed.");
     }
 
-    private void ShowConnectedPlayers(List<PlayerOutputModel> connectedPlayers)
-    {
-        _holder.ConnectPlayer(connectedPlayers);
-        Debug.Log("Displayed all connected players");
-    }
+    //private void AddConnectedPlayer(PlayerOutputModel connectedPlayer)
+    //{
+    //    _holder.ConnectPlayer(connectedPlayer);
+    //    Debug.Log("Connected: " + connectedPlayer.PlayerName);
+    //}
 
-    private void DisconnectPlayer(int playerId)
+    private void RemoveDisconnectedPlayer(int playerId)
     {
         _holder.DisconnectPlayer(playerId);
         Debug.Log("Disconnected: " + playerId);

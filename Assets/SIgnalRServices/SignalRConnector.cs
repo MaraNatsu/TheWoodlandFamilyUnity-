@@ -16,9 +16,11 @@ namespace Assets.SignalRServices
         private string _serverUrl = "http://localhost:5000/gamehub";
 
         public Action<List<PlayerOutputModel>> OnConnectionStarted;
-        //public Action<PlayerOutputModel> OnPlayerConnected;
         public Action<int> OnPlayerDisconnected;
-        public Action OnAllPlayersConnected;
+        public Action<int> OnPlayersConnected;
+
+        public Action<string> OnCardTyprDefined;
+        public Action<PlayerOutputModel> OnPlayerUpdated;
 
         private HubConnection _connection;
 
@@ -59,20 +61,35 @@ namespace Assets.SignalRServices
                 OnConnectionStarted?.Invoke(connectedPlayers);
             });
 
-            //_connection.On<PlayerOutputModel>("AddConnectedPlayer", (connectedPlayer) =>
-            //{
-            //    OnPlayerConnected?.Invoke(connectedPlayer);
-            //});
-
             _connection.On<int>("RemoveDisconnectedPlayer", (playerId) =>
             {
                 OnPlayerDisconnected?.Invoke(playerId);
             });
 
             //subscriber registration; subscriber: "StartGame", ()
-            _connection.On("StartGame", () =>
+            _connection.On<int>("StartGame", (playerId) =>
             {
-                OnAllPlayersConnected?.Invoke();
+                OnPlayersConnected?.Invoke(playerId);
+            });
+
+            _connection.On<string>("ShowCardTaken", (cardType) =>
+            {
+                OnCardTyprDefined?.Invoke(cardType);
+            });
+
+            _connection.On<PlayerOutputModel>("UpdatePlayerData", (updatedPlayer) =>
+            {
+                OnPlayerUpdated?.Invoke(updatedPlayer);
+            });
+
+            _connection.On<int>("MakeMove", (nextPlayerId) =>
+            {
+                OnPlayersConnected?.Invoke(nextPlayerId);
+            });
+
+            _connection.On<int>("FinishGame", (winnerId) =>
+            {
+                OnPlayersConnected?.Invoke(winnerId);
             });
 
             _connection.Closed += Disconnect;
@@ -86,21 +103,6 @@ namespace Assets.SignalRServices
             Debug.Log("Disconnected: " + ex);
         }
 
-        //public async Task ConnectPlayerAsync(PlayerToConnectInputModel playerToConnect)
-        //{
-        //    try
-        //    {
-        //        await _connection.InvokeAsync("SendConnectedPlayer", playerToConnect);
-
-        //        Debug.Log("InvokeAsync \"SendConnectedPlayer\"");
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        Debug.Log("SendConnectedPlayer Error: " + ex.Message);
-        //        Debug.LogError($"Error {ex.Message}");
-        //    }
-        //}
-
         private async Task StartConnectionAsync()
         {
             try
@@ -113,6 +115,20 @@ namespace Assets.SignalRServices
             {
                 Debug.LogError($"Error {ex.Message}");
                 Debug.LogError($"Error {ex.StackTrace}");
+            }
+        }
+
+        public async Task SendMove(int playerId, string wordkey)
+        {
+            try
+            {
+                await _connection.InvokeAsync("ProcessMove", playerId, wordkey);
+                Debug.Log("InvokeAsync \"ProcessMove\"");
+            }
+            catch (Exception ex)
+            {
+                Debug.Log("DefineCardType: " + ex.Message);
+                Debug.LogError($"Error {ex.Message}");
             }
         }
     }

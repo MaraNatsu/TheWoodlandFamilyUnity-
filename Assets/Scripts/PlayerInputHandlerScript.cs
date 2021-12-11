@@ -3,6 +3,7 @@ using Assets.SIgnalRServices;
 using System;
 using System.Collections;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -32,6 +33,7 @@ public class PlayerInputHandlerScript : MonoBehaviour
 
     private string _roomCreationRoute = "http://localhost:5000/api/Home/create-room";
     private string _playerCreationRoute = "http://localhost:5000/api/Home/create-player";
+    private string _playerRemovingRoute = "http://localhost:5000/api/Home/remove-player";
 
     public void ConvertCaseToUpper(InputField inputField)
     {
@@ -67,6 +69,12 @@ public class PlayerInputHandlerScript : MonoBehaviour
         Debug.Log("Start Coroutine \"Player creation\"");
     }
 
+    public void SendPlayerRemovingRequest()
+    {
+        StartCoroutine(SendPlayerRemovingData());
+        Debug.Log("Start Coroutine \"Player removing\"");
+    }
+
     private IEnumerator SendRoomCreationData()
     {
         string jsonRequest = $"{{\"Wordkey\": \"{_wordKeyToCreateRoom.text}\", \"PlayerNumber\": {_playerNumber.text}}}";
@@ -94,6 +102,15 @@ public class PlayerInputHandlerScript : MonoBehaviour
         });
 
         GivePlayerCreationResult();
+    }
+
+    private IEnumerator SendPlayerRemovingData()
+    {
+        string jsonRequest = $"{{\"Name\": \"{_playerName.text}\", \"Wordkey\": \"{_wordKey}\"}}";
+        Thread.Sleep(5000);
+        yield return CreateRequest(_playerRemovingRoute, jsonRequest);
+
+        GiveRoomCreationResult();
     }
 
     private IEnumerator CreateRequest(string route, string jsonRequest, Action<string> OnRequestDone = null)

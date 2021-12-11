@@ -53,9 +53,9 @@ public class WebSocketHandlerScript : MonoBehaviour
         _holder.FillHolder(_newPlayer, _waitingScreen, GameDataStorage.CurrentClient.PlayerNumber);
 
         _connector = SignalRConnector.GetInstance();
-        _connector.OnConnectionStarted += GetConnectedPlayers;
+        _connector.OnConnectionStarted += UpdateConnectionViews;
         _connector.OnPlayerDisconnected += RemoveDisconnectedPlayer;
-        _connector.OnPlayersConnected += LoadGameScene;
+        _connector.OnPlayersConnected += StartGame;
         _connector.OnCardTyprDefined += ShowCardTaken;
         _connector.OnPlayerUpdated += UpdatePlayerViewList;
         _connector.OnPlayersConnected += MakeMove;
@@ -64,7 +64,7 @@ public class WebSocketHandlerScript : MonoBehaviour
         await _connector.InitAsync();
     }
 
-    private void GetConnectedPlayers(List<PlayerOutputModel> connectedPlayers)
+    private void UpdateConnectionViews(List<PlayerOutputModel> connectedPlayers)
     {
         _holder.UpdateConnections(connectedPlayers);
         Debug.Log("Connected players are displayed:" + connectedPlayers.Count);
@@ -76,11 +76,13 @@ public class WebSocketHandlerScript : MonoBehaviour
         Debug.Log("Disconnected: " + playerId);
     }
 
-    private void LoadGameScene(int playerId)
+    private void StartGame(int firstPlayerId)
     {
         var connectedPlayers = _holder.GetConnectedPlayers();
+
+        Thread.Sleep(3000);
         _processor.InstantiateGameBoard(connectedPlayers, _currentPlayerView, _playerView, _gameScreen, _deck, _healthPoint, _waitingScreen);
-        MakeMove(playerId);
+        MakeMove(firstPlayerId);
     }
 
     private void ShowCardTaken(string cardType)
@@ -124,5 +126,12 @@ public class WebSocketHandlerScript : MonoBehaviour
     private void EndGame(int winnerId)
     {
         _processor.ShowWinner(winnerId, _winnerText, _gameScreen);
+    }
+
+    public async void QuitTheGame()
+    {
+        await _connector.CloseConnection();
+        Application.Quit();
+        Debug.Log("Close connection");
     }
 }

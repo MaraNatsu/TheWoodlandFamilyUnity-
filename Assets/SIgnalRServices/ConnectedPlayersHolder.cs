@@ -48,12 +48,16 @@ namespace Assets.SIgnalRServices
 
         public void UpdateConnections(List<PlayerOutputModel> connectedPlayers)
         {
+            PlayerOutputModel connectedPlayer;
+
             for (int i = 0; i < connectedPlayers.Count; i++)
             {
-                var key = _connectedPlayers.ElementAt(i).Key;
+                connectedPlayer = connectedPlayers.FirstOrDefault(player => player.Id == _connectedPlayers.ElementAt(i).Value.Id);
 
-                if (!connectedPlayers.Contains(_connectedPlayers[key]))
+                if (connectedPlayer == null)
                 {
+                    var key = _connectedPlayers.ElementAt(i).Key;
+
                     ConnectPlayer(key, connectedPlayers[i]);
                 }
             }
@@ -84,7 +88,14 @@ namespace Assets.SIgnalRServices
 
         public List<PlayerOutputModel> GetConnectedPlayers()
         {
-            return _connectedPlayers.Values.ToList();
+            List<PlayerOutputModel> connectedPlayers = new List<PlayerOutputModel>();
+
+            foreach (var player in _connectedPlayers)
+            {
+                connectedPlayers.Add(player.Value);
+            }
+
+            return connectedPlayers;
         }
     }
 }

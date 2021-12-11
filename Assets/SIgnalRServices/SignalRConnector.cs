@@ -67,9 +67,9 @@ namespace Assets.SignalRServices
             });
 
             //subscriber registration; subscriber: "StartGame", ()
-            _connection.On<int>("StartGame", (playerId) =>
+            _connection.On<int>("StartGame", (firstPlayerId) =>
             {
-                OnPlayersConnected?.Invoke(playerId);
+                OnPlayersConnected?.Invoke(firstPlayerId);
             });
 
             _connection.On<string>("ShowCardTaken", (cardType) =>
@@ -130,6 +130,11 @@ namespace Assets.SignalRServices
                 Debug.Log("DefineCardType: " + ex.Message);
                 Debug.LogError($"Error {ex.Message}");
             }
+        }
+
+        public async Task CloseConnection()
+        {
+            await _connection.StopAsync();
         }
     }
 }

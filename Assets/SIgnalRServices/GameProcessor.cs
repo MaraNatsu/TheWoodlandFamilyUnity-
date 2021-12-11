@@ -84,15 +84,11 @@ namespace Assets.SIgnalRServices
 
         public void TakeCard(int playerId, Button card)
         {
-            var key = _playerViews.FirstOrDefault(player => player.Value.Id == playerId).Key;
-
-            if(GameDataStorage.CurrentClient.PlayerId == playerId)
-            {
-                key.GetComponent<Renderer>().material.color = default;
-                card.interactable = true;
-            }
+            card.interactable = true;
+            var key = _playerViews.First(player => player.Value.Id == playerId).Key;
+            key.GetComponent<Renderer>().material.color = default;
         }
-        
+
         private void SetInstantiationTurn(List<PlayerOutputModel> players, PlayerOutputModel currentPlayer)
         {
             players.OrderBy(player => player.Turn);
@@ -102,7 +98,7 @@ namespace Assets.SIgnalRServices
 
             foreach (var player in players)
             {
-                if (player.Turn > currentPlayer.Turn && player.Turn <= players.Count)
+                if (player.Turn > currentPlayer.Turn)
                 {
                     temp.Add(player);
                 }
@@ -110,7 +106,7 @@ namespace Assets.SIgnalRServices
 
             foreach (var player in players)
             {
-                if (player.Turn < currentPlayer.Turn && player.Turn > 0)
+                if (player.Turn < currentPlayer.Turn)
                 {
                     temp.Add(player);
                 }

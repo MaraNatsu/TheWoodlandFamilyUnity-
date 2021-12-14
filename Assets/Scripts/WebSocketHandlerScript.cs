@@ -1,17 +1,11 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
-using Microsoft.AspNetCore.SignalR.Client;
 using Assets.SignalRModels;
 using Assets.SignalRServices;
-using UnityEngine.SceneManagement;
 using Assets.SIgnalRServices;
-using System.Linq;
 using Assets.Enams;
-using System.Threading;
 
 public class WebSocketHandlerScript : MonoBehaviour
 {
@@ -32,7 +26,7 @@ public class WebSocketHandlerScript : MonoBehaviour
     private Button _deck;
 
     [SerializeField]
-    GameObject _winnerText;
+    GameObject _endingScreen;
     [SerializeField]
     GameObject _healthPoint;
 
@@ -55,11 +49,11 @@ public class WebSocketHandlerScript : MonoBehaviour
         _connector = SignalRConnector.GetInstance();
         _connector.OnConnectionStarted += UpdateConnectionViews;
         _connector.OnPlayerDisconnected += RemoveDisconnectedPlayer;
-        _connector.OnPlayersConnected += StartGame;
+        _connector.OnGameStarted += StartGame;
         _connector.OnCardTyprDefined += ShowCardTaken;
         _connector.OnPlayerUpdated += UpdatePlayerViewList;
-        _connector.OnPlayersConnected += MakeMove;
-        _connector.OnPlayersConnected += EndGame;
+        _connector.OnMoveAllowed += AllowPlayerToMove;
+        _connector.OnGameEnded += EndGame;
 
         await _connector.InitAsync();
     }
@@ -79,53 +73,49 @@ public class WebSocketHandlerScript : MonoBehaviour
     private void StartGame(int firstPlayerId)
     {
         var connectedPlayers = _holder.GetConnectedPlayers();
-
-        Thread.Sleep(3000);
         _processor.InstantiateGameBoard(connectedPlayers, _currentPlayerView, _playerView, _gameScreen, _deck, _healthPoint, _waitingScreen);
-        MakeMove(firstPlayerId);
+    }
+
+    private void AllowPlayerToMove()
+    {
+        _deck.interactable = true;
+    }
+
+    public async void TakeCard()
+    {
+        await _connector.SendMove(GameDataStorage.CurrentClient.PlayerId, GameDataStorage.CurrentClient.Wordkey);
+        _deck.interactable = false;
     }
 
     private void ShowCardTaken(string cardType)
     {
-        GameObject instance = null;
-
         switch (cardType)
         {
             case nameof(CardType.Simple):
-                instance = Instantiate(_simpleCard, _waitingScreen.transform);
+                _cardTaken = _simpleCard;
                 break;
             case nameof(CardType.Life):
-                instance = Instantiate(_lifeCard, _waitingScreen.transform);
+                _cardTaken = _lifeCard;
                 break;
             case nameof(CardType.Trap):
-                instance = Instantiate(_trapCard, _waitingScreen.transform);
+                _cardTaken = _trapCard;
                 break;
         }
 
-        _cardTaken = instance;
-
-        Thread.Sleep(3000);
-        Destroy(_cardTaken);
+        var instance = Instantiate(_cardTaken, _gameScreen.transform);
+        Debug.Log("Card is shown: " + cardType);
+        Destroy(instance, 2);
+        Debug.Log("Card was destroyed");
     }
 
     private void UpdatePlayerViewList(PlayerOutputModel updatedPlayer)
     {
-        _processor.UpdatePlayerViews(updatedPlayer, _healthPoint, _gameScreen);
-    }
-
-    private void MakeMove(int nextPlayerId)
-    {
-        _processor.TakeCard(nextPlayerId, _deck);
-
-        _deck.onClick.AddListener(async () =>
-        {
-            await _connector.SendMove(nextPlayerId, GameDataStorage.CurrentClient.Wordkey);
-        });
+        _processor.UpdatePlayerViews(updatedPlayer);
     }
 
     private void EndGame(int winnerId)
     {
-        _processor.ShowWinner(winnerId, _winnerText, _gameScreen);
+        _processor.ShowWinner(winnerId, _endingScreen, _gameScreen);
     }
 
     public async void QuitTheGame()

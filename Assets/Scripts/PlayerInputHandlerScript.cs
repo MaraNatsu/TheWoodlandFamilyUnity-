@@ -3,8 +3,6 @@ using Assets.SIgnalRServices;
 using System;
 using System.Collections;
 using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.UI;
@@ -40,23 +38,12 @@ public class PlayerInputHandlerScript : MonoBehaviour
         inputField.text = inputField.text.ToUpper();
     }
 
-    public void GiveRoomCreationResult()
+    public void Share()
     {
-        //string welcome = $"Welcome, {_playerName.text}!";
-        //string roomCreationResult = "Room has been created succesfully.";
-        //_welcomingText.text = (welcome + '\n' + '\n' + roomCreationResult).ToUpper();
-        _roomCreationResult.text = "Room has been created succesfully.".ToUpper();
-
-        _loader.SetActive(false);
-        _roomJoiningForCreator.SetActive(true);
+        Application.OpenURL("tg://msg_url?url=<appUrl>&text=" + _wordKeyToCreateRoom.text);
     }
 
-    public void GivePlayerCreationResult()
-    {
-        _loader.SetActive(false);
-        _waitingScreen.SetActive(true);
-    }
-
+    // Web requests for room and player creation
     public void SendRoomCreationRequest()
     {
         StartCoroutine(SendRoomCreationData());
@@ -67,12 +54,6 @@ public class PlayerInputHandlerScript : MonoBehaviour
     {
         StartCoroutine(SendPlayerCreationData());
         Debug.Log("Start Coroutine \"Player creation\"");
-    }
-
-    public void SendPlayerRemovingRequest()
-    {
-        StartCoroutine(SendPlayerRemovingData());
-        Debug.Log("Start Coroutine \"Player removing\"");
     }
 
     private IEnumerator SendRoomCreationData()
@@ -104,15 +85,6 @@ public class PlayerInputHandlerScript : MonoBehaviour
         GivePlayerCreationResult();
     }
 
-    private IEnumerator SendPlayerRemovingData()
-    {
-        string jsonRequest = $"{{\"Name\": \"{_playerName.text}\", \"Wordkey\": \"{_wordKey}\"}}";
-        Thread.Sleep(5000);
-        yield return CreateRequest(_playerRemovingRoute, jsonRequest);
-
-        GiveRoomCreationResult();
-    }
-
     private IEnumerator CreateRequest(string route, string jsonRequest, Action<string> OnRequestDone = null)
     {
         UnityWebRequest request = new UnityWebRequest(route, "POST");
@@ -133,5 +105,19 @@ public class PlayerInputHandlerScript : MonoBehaviour
         Debug.Log("Server response: " + request);
         Debug.Log("Server response: " + request.result);
         Debug.Log("Status code: " + request.responseCode);
+    }
+
+    private void GiveRoomCreationResult()
+    {
+        _roomCreationResult.text = "Room has been created succesfully.\n\nWordkey: ".ToUpper() + _wordKeyToCreateRoom.text;
+
+        _loader.SetActive(false);
+        _roomJoiningForCreator.SetActive(true);
+    }
+
+    private void GivePlayerCreationResult()
+    {
+        _loader.SetActive(false);
+        _waitingScreen.SetActive(true);
     }
 }

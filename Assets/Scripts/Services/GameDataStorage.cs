@@ -1,14 +1,14 @@
-﻿using Assets.SignalRModels;
+﻿using Assets.Scripts.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Assets.SIgnalRServices
+namespace Assets.Scripts.Services
 {
     class GameDataStorage
     {
-        public static ClientDataModel CurrentClient { get; set; }
+        public static PlayerData CurrentClient { get; set; }
     }
 }

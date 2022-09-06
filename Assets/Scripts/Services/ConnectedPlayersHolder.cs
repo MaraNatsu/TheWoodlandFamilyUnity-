@@ -1,4 +1,4 @@
-﻿using Assets.SignalRModels;
+﻿using Assets.Scripts.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Assets.SIgnalRServices
+namespace Assets.Scripts.Services
 {
     class ConnectedPlayersHolder
     {

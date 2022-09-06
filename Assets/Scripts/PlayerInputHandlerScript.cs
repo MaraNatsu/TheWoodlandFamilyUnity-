@@ -1,5 +1,5 @@
-using Assets.SignalRModels;
-using Assets.SIgnalRServices;
+using Assets.Scripts.Models;
+using Assets.Scripts.Services;
 using System;
 using System.Collections;
 using System.Text;
@@ -79,7 +79,7 @@ public class PlayerInputHandlerScript : MonoBehaviour
         string jsonRequest = $"{{\"Name\": \"{_playerName.text}\", \"Wordkey\": \"{_wordKey}\"}}";
         yield return CreateRequest(_playerCreationRoute, jsonRequest, (requestResponse) =>
         {
-            GameDataStorage.CurrentClient = Newtonsoft.Json.JsonConvert.DeserializeObject<ClientDataModel>(requestResponse);
+            GameDataStorage.CurrentClient = Newtonsoft.Json.JsonConvert.DeserializeObject<PlayerData>(requestResponse);
         });
 
         GivePlayerCreationResult();

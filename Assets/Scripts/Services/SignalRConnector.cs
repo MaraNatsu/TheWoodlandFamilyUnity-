@@ -3,11 +3,10 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 using Microsoft.AspNetCore.SignalR.Client;
-using Assets.SignalRModels;
 using Microsoft.AspNetCore.Http.Connections;
-using Assets.SIgnalRServices;
+using Assets.Scripts.Models;
 
-namespace Assets.SignalRServices
+namespace Assets.Scripts.Services
 {
     class SignalRConnector
     {

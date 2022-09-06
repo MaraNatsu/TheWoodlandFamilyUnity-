@@ -2,10 +2,9 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
-using Assets.SignalRModels;
-using Assets.SignalRServices;
-using Assets.SIgnalRServices;
-using Assets.Enams;
+using Assets.Scripts.Services;
+using Assets.Scripts.Enams;
+using Assets.Scripts.Models;
 
 public class WebSocketHandlerScript : MonoBehaviour
 {
@@ -60,7 +59,7 @@ public class WebSocketHandlerScript : MonoBehaviour
 
     private void UpdateConnectionViews(List<PlayerOutputModel> connectedPlayers)
     {
-        _holder.UpdateConnections(connectedPlayers);
+        //_holder.UpdateConnections(connectedPlayers);
         Debug.Log("Connected players are displayed:" + connectedPlayers.Count);
     }
 
@@ -73,12 +72,13 @@ public class WebSocketHandlerScript : MonoBehaviour
     private void StartGame(int firstPlayerId)
     {
         var connectedPlayers = _holder.GetConnectedPlayers();
-        _processor.InstantiateGameBoard(connectedPlayers, _currentPlayerView, _playerView, _gameScreen, _deck, _healthPoint, _waitingScreen);
+        //_processor.InstantiateGameBoard(connectedPlayers, _currentPlayerView, _playerView, _gameScreen, _deck, _healthPoint, _waitingScreen);
     }
 
     private void AllowPlayerToMove()
     {
         _deck.interactable = true;
+        Debug.Log("Allowed");
     }
 
     public async void TakeCard()

@@ -1,10 +1,10 @@
-﻿using Assets.SignalRModels;
+﻿using Assets.Scripts.Models;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Assets.SIgnalRServices
+namespace Assets.Scripts.Services
 {
     class GameProcessor
     {

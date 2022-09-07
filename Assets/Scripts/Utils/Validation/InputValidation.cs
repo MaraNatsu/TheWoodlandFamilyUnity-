@@ -1,4 +1,5 @@
 using Assets.Scripts.Utils.Validation.Enums;
+using System;
 using System.Text.RegularExpressions;
 using UnityEngine;
 using UnityEngine.UI;
@@ -30,10 +31,7 @@ namespace Assets.Scripts.Utils.Validation
             {
                 Instance = this;
             }
-        }
 
-        private void Start()
-        {
             _inputError = new InputErrorUIManager();
         }
 
@@ -42,7 +40,6 @@ namespace Assets.Scripts.Utils.Validation
             if (string.IsNullOrWhiteSpace(input.text))
             {
                 input.text = string.Empty;
-                StartCoroutine(_inputError.VizualizeError(input, ErrorType.EmptyField));
                 return;
             }
 
@@ -72,10 +69,15 @@ namespace Assets.Scripts.Utils.Validation
             if (!string.IsNullOrEmpty(input.text))
             {
                 _hasError = false;
+                _createRoom.interactable = true;
+                _joinRoom.interactable = true;
+                input.text = input.text.Trim();
                 return;
             }
 
             _hasError = true;
+            _createRoom.interactable = false;
+            _joinRoom.interactable = false;
             StartCoroutine(_inputError.VizualizeError(input, ErrorType.EmptyField));
         }
 

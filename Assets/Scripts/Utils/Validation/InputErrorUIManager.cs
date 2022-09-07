@@ -1,7 +1,5 @@
 ﻿using Assets.Scripts.Utils.Validation.Enums;
-using System;
 using System.Collections;
-using System.Text.RegularExpressions;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -25,48 +23,43 @@ namespace Assets.Scripts.Utils.Validation
             {
                 case ErrorType.EmptyField:
                     Text placeholder = input.placeholder.GetComponent<Text>();
+                    yield return TranslateColor(placeholder, _normalColorPlaceholder, _errorColorPlaceholder);
+                    //yield return TranslateColor((Color32 transitionColor) => placeholder.color = transitionColor, _normalColorPlaceholder, _errorColorPlaceholder);
                     placeholder.text = _errorTextIfEmpty;
-                    yield return TranslateColor(placeholder.color, _normalColorPlaceholder, _errorColorPlaceholder);
                     break;
                 case ErrorType.InputError:
-                    yield return TranslateColor(input.image.color, _normalColorInputField, _errorColorInputField);
-                    yield return TranslateColor(_normalColorInputField, input.image.color, _errorColorInputField);
+                    yield return TranslateColor(input.image, _normalColorInputField, _errorColorInputField);
+                    yield return TranslateColor(input.image, _errorColorInputField, _normalColorInputField);
+                    //yield return TranslateColor((Color32 transitionColor) => input.image.color = transitionColor, _normalColorInputField, _errorColorInputField);
+                    //yield return TranslateColor((Color32 transitionColor) => input.image.color = transitionColor, _errorColorInputField, _normalColorInputField);
                     break;
             }
         }
 
-        private IEnumerator TranslateColor(Color targer, Color from, Color to)
+        private IEnumerator TranslateColor(MaskableGraphic target, Color from, Color to)
         {
             float index = 0;
-
             while (index <= 1)
             {
-                targer = Color.Lerp(from, to, index);
+                target.color = Color.Lerp(from, to, index);
                 yield return null;
                 index += _indexModifier;
             }
         }
 
-        //public IEnumerator VizualizeErrorPlaceholder(Text placeholder, ErrorPlace error, float timeToSetView = .2f, byte numberOfIterations = 6, float index = 0)
-        //{
-        //    float indexModifier = timeToSetView / numberOfIterations;
-        //    placeholder.text = _errorTextIfEmpty;
+        private delegate void MyDelegate(Color32 color);
 
-        //    switch (error)
+        //private IEnumerator TranslateColor(MyDelegate myDelegate, Color from, Color to)
+        //{
+        //    float index = 0;
+        //    while (index <= 1)
         //    {
-        //        case ErrorPlace.Nickname:
-        //            while (index <= 1)
-        //            {
-        //                placeholder.color = Color.Lerp(_normalColorPlaceholder, _errorColorPlaceholder, index);
-        //                yield return null;
-        //                index += indexModifier;
-        //            }
-        //            break;
-        //        case ErrorPlace.PlayerNumber:
-        //            break;
-        //        default:
-        //            break;
+        //        Color32 transitionColor = Color.Lerp(from, to, index);
+        //        myDelegate(transitionColor);
+        //        yield return null;
+        //        index += _indexModifier;
         //    }
+        //    Debug.Log("test");
         //}
 
         public void SetNormalPlaceholder(Text placeholder)

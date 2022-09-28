@@ -1,41 +1,17 @@
 using Assets.Scripts.Utils.Validation.Enums;
 using System;
 using System.Text.RegularExpressions;
-using UnityEngine;
 using UnityEngine.UI;
 
 namespace Assets.Scripts.Utils.Validation
 {
-    public class InputValidation : MonoBehaviour
+    public class InputValidation
     {
-        public static InputValidation Instance { get; private set; }
+        public static InputValidation Instance { get; private set; } = new InputValidation();
 
-        [SerializeField]
-        private Button _createRoom;
-        [SerializeField]
-        private Button _joinRoom;
+        private InputValidation() { }
 
-        private int _minPlayerNumver = 2;
-        private int _maxPlayerNumber = 5;
-
-        private bool _hasError = true;
-        private InputErrorUIManager _inputError;
-
-        private void Awake()
-        {
-            if (Instance != null && Instance != this)
-            {
-                Destroy(this);
-            }
-            else
-            {
-                Instance = this;
-            }
-
-            _inputError = new InputErrorUIManager();
-        }
-
-        public void CheckWhiteSpaces(InputField input)
+        public void ManageWhiteSpaces(InputField input, Action<ErrorType> ErrorVizualizer)
         {
             if (string.IsNullOrWhiteSpace(input.text))
             {
@@ -43,57 +19,58 @@ namespace Assets.Scripts.Utils.Validation
                 return;
             }
 
-            if (input.name == "Nickname")
+            if (input.text.Contains("  "))
             {
-                if (input.text.Contains("  "))
-                {
-                    StartCoroutine(_inputError.VizualizeError(input, ErrorType.InputError));
-                }
-
-                input.text = Regex.Replace(input.text, "  ", " ");
+                //StartCoroutine(_inputError.VizualizeError(input, ErrorType.WhiteSpace));
+                ErrorVizualizer(ErrorType.WhiteSpace);
             }
-            else
-            {
-                if (input.text.Contains(" "))
-                {
-                    StartCoroutine(_inputError.VizualizeError(input, ErrorType.InputError));
-                }
 
-                input.text = Regex.Replace(input.text, " ", "");
-            }
+            input.text = Regex.Replace(input.text, "  ", " ");
         }
 
-        public void CheckIfInputEmpty(InputField input)
+        public void DeleteAllWhiteSpaces(InputField input, Action<ErrorType> ErrorVizualizer)
         {
-
-            if (!string.IsNullOrEmpty(input.text))
+            if (string.IsNullOrWhiteSpace(input.text))
             {
-                _hasError = false;
-                _createRoom.interactable = true;
-                _joinRoom.interactable = true;
-                input.text = input.text.Trim();
+                input.text = string.Empty;
                 return;
             }
 
-            _hasError = true;
-            _createRoom.interactable = false;
-            _joinRoom.interactable = false;
-            StartCoroutine(_inputError.VizualizeError(input, ErrorType.EmptyField));
+            if (input.text.Contains(" "))
+            {
+                //StartCoroutine(_inputError.VizualizeError(input, ErrorType.WhiteSpace));
+                ErrorVizualizer(ErrorType.WhiteSpace);
+            }
+
+            input.text = Regex.Replace(input.text, " ", "");
         }
 
-        public void CheckIfNumber()
+        public bool CheckIfInputEmpty(InputField input, Action<ErrorType> ErrorVizualizer)
         {
+            if (!string.IsNullOrEmpty(input.text))
+            {
+                input.text = input.text.TrimEnd();
+                return false;
+            }
 
+            //StartCoroutine(_inputError.VizualizeError(input, ErrorType.EmptyField));
+            ErrorVizualizer(ErrorType.EmptyField);
+            return true;
         }
 
-        public void CheckIfPlayerNumberInRange()
+        public void CheckIfNumberInRange(InputField input, Action<ErrorType> ErrorVizualizer, int minNumber, int maxNumber, int characterLimit = 1)
         {
+            input.characterLimit = characterLimit;
+            Regex regex = new Regex($"[{minNumber}-{maxNumber}]");
 
-        }
+            if (regex.IsMatch(input.text))
+            {
+                return;
+            }
 
-        public void SetNormalPlaceholder(Text placeholder)
-        {
-            _inputError.SetNormalPlaceholder(placeholder);
+            input.text = string.Empty;
+            //StartCoroutine(_inputError.VizualizeError(input, ErrorType.NotNumberInRange));
+            ErrorVizualizer(ErrorType.NotNumberInRange);
         }
     }
 }

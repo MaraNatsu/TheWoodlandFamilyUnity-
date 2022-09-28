@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace Assets.Scripts.Utils.Validation.Enums
 {
-    public enum ErrorType
+    public enum InputFieldName
     {
-        EmptyField,
-        WhiteSpace,
-        NotNumberInRange
+        Nickname,
+        KeyWord,
+        PlayerNumber
     }
 }

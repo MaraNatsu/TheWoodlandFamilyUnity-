@@ -79,7 +79,7 @@ public class PlayerInputHandlerScript : MonoBehaviour
         string jsonRequest = $"{{\"Name\": \"{_playerName.text}\", \"Wordkey\": \"{_wordKey}\"}}";
         yield return CreateRequest(_playerCreationRoute, jsonRequest, (requestResponse) =>
         {
-            GameDataStorage.CurrentClient = Newtonsoft.Json.JsonConvert.DeserializeObject<PlayerData>(requestResponse);
+            GameDataStorage.CurrentClient = Newtonsoft.Json.JsonConvert.DeserializeObject<Player>(requestResponse);
         });
 
         GivePlayerCreationResult();

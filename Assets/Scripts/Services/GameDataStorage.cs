@@ -9,6 +9,6 @@ namespace Assets.Scripts.Services
 {
     class GameDataStorage
     {
-        public static PlayerData CurrentClient { get; set; }
+        public static Player CurrentClient { get; set; }
     }
 }

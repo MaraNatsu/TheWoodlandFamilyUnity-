@@ -41,10 +41,10 @@ namespace Assets.Scripts.Services
 
         public async Task InitAsync()
         {
-            _connection = new HubConnectionBuilder()
-                    .WithUrl($"http://localhost:5000/gamehub?playerId={GameDataStorage.CurrentClient.PlayerId}", HttpTransportType.LongPolling)
-                    .WithAutomaticReconnect()
-                    .Build();
+            //_connection = new HubConnectionBuilder()
+            //        .WithUrl($"http://localhost:5000/gamehub?playerId={GameDataStorage.CurrentClient.Id}", HttpTransportType.LongPolling)
+            //        .WithAutomaticReconnect()
+            //        .Build();
 
             _connection.Reconnecting += error =>
             {

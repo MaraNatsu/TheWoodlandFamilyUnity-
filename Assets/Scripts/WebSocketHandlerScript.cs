@@ -43,7 +43,7 @@ public class WebSocketHandlerScript : MonoBehaviour
 
     async Task Start()
     {
-        _holder.FillHolder(_newPlayer, _waitingScreen, GameDataStorage.CurrentClient.PlayerNumber);
+      //  _holder.FillHolder(_newPlayer, _waitingScreen, GameDataStorage.CurrentClient.PlayerNumber);
 
         _connector = SignalRConnector.GetInstance();
         _connector.OnConnectionStarted += UpdateConnectionViews;
@@ -83,7 +83,7 @@ public class WebSocketHandlerScript : MonoBehaviour
 
     public async void TakeCard()
     {
-        await _connector.SendMove(GameDataStorage.CurrentClient.PlayerId, GameDataStorage.CurrentClient.Wordkey);
+       // await _connector.SendMove(GameDataStorage.CurrentClient.Id, GameDataStorage.CurrentClient.Wordkey);
         _deck.interactable = false;
     }
 

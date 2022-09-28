@@ -29,10 +29,10 @@ namespace Assets.Scripts.Services
 
             var currentPlayer = new PlayerOutputModel
             {
-                Id = GameDataStorage.CurrentClient.PlayerId,
-                PlayerName = GameDataStorage.CurrentClient.PlayerName,
-                Turn = GameDataStorage.CurrentClient.PlayerTurn,
-                HealthCount = GameDataStorage.CurrentClient.HealthCount
+                //Id = GameDataStorage.CurrentClient.Id,
+                //PlayerName = GameDataStorage.CurrentClient.Name,
+                //Turn = GameDataStorage.CurrentClient.Turn,
+                //HealthCount = GameDataStorage.CurrentClient.HealthCount
             };
 
             connectedPlayers = SetInstantiationTurn(connectedPlayers, currentPlayer);
@@ -58,29 +58,29 @@ namespace Assets.Scripts.Services
                 _playerViews.Add(instance, player);
             }
 
-            switch (GameDataStorage.CurrentClient.PlayerNumber)
-            {
-                case 2:
-                    _playerViews.ElementAt(1).Key.GetComponentInChildren<RectTransform>().sizeDelta = new Vector3(300, 200);
-                    _playerViews.ElementAt(1).Key.transform.localPosition = new Vector3(0, 150);
-                    _playerViews.ElementAt(1).Key.GetComponentInChildren<Text>().alignment = TextAnchor.LowerCenter;
-                    break;
-                case 3:
-                    _playerViews.ElementAt(1).Key.transform.localPosition = new Vector3(-70, 100);
-                    _playerViews.ElementAt(2).Key.transform.localPosition = new Vector3(70, 100);
-                    break;
-                case 4:
-                    _playerViews.ElementAt(1).Key.transform.localPosition = new Vector3(-70, 0);
-                    _playerViews.ElementAt(2).Key.transform.localPosition = new Vector3(0, 155);
-                    _playerViews.ElementAt(3).Key.transform.localPosition = new Vector3(70, 0);
-                    break;
-                case 5:
-                    _playerViews.ElementAt(1).Key.transform.localPosition = new Vector3(-70, 80);
-                    _playerViews.ElementAt(2).Key.transform.localPosition = new Vector3(-70, 125);
-                    _playerViews.ElementAt(3).Key.transform.localPosition = new Vector3(70, 125);
-                    _playerViews.ElementAt(4).Key.transform.localPosition = new Vector3(70, 80);
-                    break;
-            }
+            //switch (GameDataStorage.CurrentClient.PlayerNumber)
+            //{
+            //    case 2:
+            //        _playerViews.ElementAt(1).Key.GetComponentInChildren<RectTransform>().sizeDelta = new Vector3(300, 200);
+            //        _playerViews.ElementAt(1).Key.transform.localPosition = new Vector3(0, 150);
+            //        _playerViews.ElementAt(1).Key.GetComponentInChildren<Text>().alignment = TextAnchor.LowerCenter;
+            //        break;
+            //    case 3:
+            //        _playerViews.ElementAt(1).Key.transform.localPosition = new Vector3(-70, 100);
+            //        _playerViews.ElementAt(2).Key.transform.localPosition = new Vector3(70, 100);
+            //        break;
+            //    case 4:
+            //        _playerViews.ElementAt(1).Key.transform.localPosition = new Vector3(-70, 0);
+            //        _playerViews.ElementAt(2).Key.transform.localPosition = new Vector3(0, 155);
+            //        _playerViews.ElementAt(3).Key.transform.localPosition = new Vector3(70, 0);
+            //        break;
+            //    case 5:
+            //        _playerViews.ElementAt(1).Key.transform.localPosition = new Vector3(-70, 80);
+            //        _playerViews.ElementAt(2).Key.transform.localPosition = new Vector3(-70, 125);
+            //        _playerViews.ElementAt(3).Key.transform.localPosition = new Vector3(70, 125);
+            //        _playerViews.ElementAt(4).Key.transform.localPosition = new Vector3(70, 80);
+            //        break;
+            //}
         }
 
         private List<PlayerOutputModel> SetInstantiationTurn(List<PlayerOutputModel> players, PlayerOutputModel currentPlayer)
@@ -111,7 +111,7 @@ namespace Assets.Scripts.Services
 
         public void UpdatePlayerViews(PlayerOutputModel updatedPlayer)
         {
-            GameDataStorage.CurrentClient.HealthCount = updatedPlayer.HealthCount;
+            //GameDataStorage.CurrentClient.HealthCount = updatedPlayer.HealthCount;
             GameObject key = _playerViews.First(player => player.Value.Id == updatedPlayer.Id).Key;
             _playerViews[key] = updatedPlayer;
             _healthPoint.GetComponentInChildren<Text>().text = updatedPlayer.HealthCount.ToString();

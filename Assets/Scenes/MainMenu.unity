@@ -170,6 +170,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 52985731}
+  - component: {fileID: 52985732}
   m_Layer: 5
   m_Name: RoomJoining
   m_TagString: Untagged
@@ -199,6 +200,20 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &52985732
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 52985730}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e4e443e2db8cd6c4baa1f2e9dafec7f6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _keyword: {fileID: 1049312231}
+  _joinRoom: {fileID: 1819420922}
 --- !u!1 &100503376
 GameObject:
   m_ObjectHideFlags: 0
@@ -1568,61 +1583,10 @@ MonoBehaviour:
   m_CharacterLimit: 0
   m_OnEndEdit:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1651843425}
-        m_TargetAssemblyTypeName: Assets.Scripts.Utils.Validation.InputValidation,
-          Assembly-CSharp
-        m_MethodName: CheckIfInputEmpty
-        m_Mode: 2
-        m_Arguments:
-          m_ObjectArgument: {fileID: 808985684}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.UI.InputField, UnityEngine.UI
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
   m_OnValueChanged:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1651843426}
-        m_TargetAssemblyTypeName: Assets.Scripts.Utils.CaseConverter, Assembly-CSharp
-        m_MethodName: ConvertCaseToUpper
-        m_Mode: 2
-        m_Arguments:
-          m_ObjectArgument: {fileID: 808985684}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.UI.InputField, UnityEngine.UI
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 1651843425}
-        m_TargetAssemblyTypeName: Assets.Scripts.Utils.Validation.InputValidation,
-          Assembly-CSharp
-        m_MethodName: CheckWhiteSpaces
-        m_Mode: 2
-        m_Arguments:
-          m_ObjectArgument: {fileID: 808985684}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.UI.InputField, UnityEngine.UI
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 1651843425}
-        m_TargetAssemblyTypeName: Assets.Scripts.Utils.Validation.InputValidation,
-          Assembly-CSharp
-        m_MethodName: SetNormalPlaceholder
-        m_Mode: 2
-        m_Arguments:
-          m_ObjectArgument: {fileID: 1067825530}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.UI.Text, UnityEngine.UI
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
   m_CaretColor: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
   m_CustomCaretColor: 0
   m_SelectionColor: {r: 1, g: 1, b: 1, a: 1}
@@ -1901,7 +1865,7 @@ GameObject:
   - component: {fileID: 1039557481}
   - component: {fileID: 1039557480}
   m_Layer: 5
-  m_Name: KeyWordField
+  m_Name: KeyWord
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1948,7 +1912,7 @@ MonoBehaviour:
     m_SelectOnDown: {fileID: 0}
     m_SelectOnLeft: {fileID: 0}
     m_SelectOnRight: {fileID: 0}
-  m_Transition: 1
+  m_Transition: 0
   m_Colors:
     m_NormalColor: {r: 0.9393531, g: 1, b: 0.78431374, a: 1}
     m_HighlightedColor: {r: 0.9393531, g: 1, b: 0.78431374, a: 1}
@@ -2007,7 +1971,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 0.98039216, b: 0.8627451, a: 1}
+  m_Color: {r: 0.9411765, g: 1, b: 0.78431374, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -2045,7 +2009,7 @@ GameObject:
   - component: {fileID: 1049312232}
   - component: {fileID: 1049312231}
   m_Layer: 5
-  m_Name: KeyWordField
+  m_Name: KeyWord
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2737,7 +2701,7 @@ GameObject:
   - component: {fileID: 1213378412}
   - component: {fileID: 1213378411}
   m_Layer: 5
-  m_Name: PlayerNumberField
+  m_Name: PlayerNumber
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2762,8 +2726,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -7}
-  m_SizeDelta: {x: 160, y: 35}
+  m_AnchoredPosition: {x: 0, y: -9.3622}
+  m_SizeDelta: {x: 160, y: 30.2755}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1213378411
 MonoBehaviour:
@@ -2784,7 +2748,7 @@ MonoBehaviour:
     m_SelectOnDown: {fileID: 0}
     m_SelectOnLeft: {fileID: 0}
     m_SelectOnRight: {fileID: 0}
-  m_Transition: 1
+  m_Transition: 0
   m_Colors:
     m_NormalColor: {r: 0.9393531, g: 1, b: 0.78431374, a: 1}
     m_HighlightedColor: {r: 0.9393531, g: 1, b: 0.78431374, a: 1}
@@ -2843,7 +2807,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 0.98039216, b: 0.8627451, a: 1}
+  m_Color: {r: 0.9411765, g: 1, b: 0.78431374, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -2987,6 +2951,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1322719344}
+  - component: {fileID: 1322719345}
   m_Layer: 0
   m_Name: GameStartingOptions
   m_TagString: Untagged
@@ -3011,6 +2976,21 @@ Transform:
   m_Father: {fileID: 1868142531}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1322719345
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1322719343}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: da66882c27f7ecb4f964b493d59d5e79, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _nickname: {fileID: 808985684}
+  _createRoom: {fileID: 1883273043}
+  _joinRoom: {fileID: 1684055492}
 --- !u!1 &1360969960
 GameObject:
   m_ObjectHideFlags: 0
@@ -3221,7 +3201,7 @@ MonoBehaviour:
     m_PressedTrigger: Pressed
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
-  m_Interactable: 1
+  m_Interactable: 0
   m_TargetGraphic: {fileID: 1393828586}
   m_OnClick:
     m_PersistentCalls:
@@ -3249,18 +3229,6 @@ MonoBehaviour:
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 9187199940420448344, guid: 27d1b4491af228345b2a2ee6693e5fcd, type: 3}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 1
         m_CallState: 2
       - m_Target: {fileID: 159639465}
         m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
@@ -3851,64 +3819,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1570215149}
   m_CullTransparentMesh: 1
---- !u!1 &1651843424
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1651843427}
-  - component: {fileID: 1651843426}
-  - component: {fileID: 1651843425}
-  m_Layer: 0
-  m_Name: InputValidator
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1651843425
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1651843424}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7d5ea5050e5cc1d4dad4d249ff2264a3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _createRoom: {fileID: 1883273043}
-  _joinRoom: {fileID: 1684055492}
---- !u!114 &1651843426
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1651843424}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0704b45ceda5edd4bba6c0bfd8c98ac3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!4 &1651843427
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1651843424}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 92.74991, y: 316.0598, z: -26.515028}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 3
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1663763850
 GameObject:
   m_ObjectHideFlags: 0
@@ -4509,7 +4419,7 @@ MonoBehaviour:
     m_PressedTrigger: Pressed
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
-  m_Interactable: 1
+  m_Interactable: 0
   m_TargetGraphic: {fileID: 1819420923}
   m_OnClick:
     m_PersistentCalls:
@@ -4896,6 +4806,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1921267622}
+  - component: {fileID: 1921267624}
   m_Layer: 5
   m_Name: RoomCreation
   m_TagString: Untagged
@@ -4926,6 +4837,21 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1921267624
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1921267621}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa179e5c6d8fa2f4ba6d2f64f424d7f4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _keyword: {fileID: 1039557480}
+  _playerNumber: {fileID: 1213378411}
+  _createRoom: {fileID: 1393828585}
 --- !u!1 &2020115636
 GameObject:
   m_ObjectHideFlags: 0

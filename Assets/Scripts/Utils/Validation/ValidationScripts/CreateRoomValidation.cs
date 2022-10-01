@@ -58,6 +58,8 @@ public class CreateRoomValidation : MonoBehaviour
                 InputErrorUIManager.Instance.VizualizeError(_playerNumber, error);
             });
 
+            SetButtonInteractability();
+
         });
     }
 

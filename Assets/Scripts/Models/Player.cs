@@ -14,8 +14,8 @@ namespace Assets.Scripts.Models
         private byte HealthCount { get; set; }
         private byte Turn { get; set; }
         private int RoomId { get; }
-        private string Wordkey { get; set; }
-        private byte PlayerNumber { get; set; }
+        public string Wordkey { get; set; }
+        public byte PlayerNumber { get; set; }
 
         private Player() { }
     }

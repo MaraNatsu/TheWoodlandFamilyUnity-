@@ -38,13 +38,7 @@ namespace Assets.Scripts.Utils.Validation.ValidationScripts
                 });
 
                 SetButtonInteractability();
-                RecordNickname();
             });
-        }
-
-        private void RecordNickname()
-        {
-            Player.Instance.Nickname = _nickname.text;
         }
 
         private void SetButtonInteractability()

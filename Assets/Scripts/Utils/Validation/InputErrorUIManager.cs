@@ -14,10 +14,12 @@ namespace Assets.Scripts.Utils.Validation
         private readonly string _errorTextIfEmpty = "FIELD IS EMPTY!";
         private readonly string _errorTextIfNotNumberInRange = "2-5 NUMBERS ONLY";
 
-        private readonly Color32 _errorColorPlaceholder = new Color32(97, 8, 21, 135);
-        private readonly Color32 _normalColorPlaceholder = new Color32(5, 100, 20, 120);
-        private readonly Color32 _errorColorInputField = new Color32(97, 8, 21, 100);
-        private readonly Color32 _normalColorInputField = new Color32(240, 255, 200, 255);
+        private readonly Color32 _placeholderErrorColor = new Color32(97, 8, 21, 135);
+        private readonly Color32 _placeholderNormalColor = new Color32(5, 100, 20, 120);
+        private readonly Color32 _inputFieldErrorColor = new Color32(97, 8, 21, 100);
+        private readonly Color32 _inputFieldNormalColor = new Color32(240, 255, 200, 255);
+        private readonly Color32 _inputTextErrorColor = new Color32(170, 40, 50, 255);
+        private readonly Color32 _inputTextNormalColor = new Color32(15, 100, 30, 255);
 
         private readonly float _indexModifier = .2f;
 
@@ -30,22 +32,49 @@ namespace Assets.Scripts.Utils.Validation
                 case ErrorType.EmptyField:
                     {
                         Text placeholder = input.placeholder.GetComponent<Text>();
-                        yield return TranslateColor(placeholder, _normalColorPlaceholder, _errorColorPlaceholder);
+                        yield return TranslateColor(placeholder, _placeholderNormalColor, _placeholderErrorColor);
                         //yield return TranslateColor((Color32 transitionColor) => placeholder.color = transitionColor, _normalColorPlaceholder, _errorColorPlaceholder);
                         placeholder.text = _errorTextIfEmpty;
                     }
                     break;
                 case ErrorType.WhiteSpace:
-                    yield return TranslateColor(input.image, _normalColorInputField, _errorColorInputField);
-                    yield return TranslateColor(input.image, _errorColorInputField, _normalColorInputField);
+                    yield return TranslateColor(input.image, _inputFieldNormalColor, _inputFieldErrorColor);
+                    yield return TranslateColor(input.image, _inputFieldErrorColor, _inputFieldNormalColor);
                     //yield return TranslateColor((Color32 transitionColor) => input.image.color = transitionColor, _normalColorInputField, _errorColorInputField);
                     //yield return TranslateColor((Color32 transitionColor) => input.image.color = transitionColor, _errorColorInputField, _normalColorInputField);
                     break;
                 case ErrorType.NotNumberInRange:
                     {
                         Text placeholder = input.placeholder.GetComponent<Text>();
-                        yield return TranslateColor(placeholder, _normalColorPlaceholder, _errorColorPlaceholder);
+                        yield return TranslateColor(placeholder, _placeholderNormalColor, _placeholderErrorColor);
                         placeholder.text = _errorTextIfNotNumberInRange;
+                    }
+                    break;
+                case ErrorType.NotWordInRange:
+                    if (input.image.color == _inputFieldNormalColor)
+                    {
+                        yield return TranslateColor(input.image, _inputFieldNormalColor, _inputFieldErrorColor);
+                    }
+                    break;
+            }
+        }
+
+        public IEnumerator VizualizeError(InputField input, ErrorType errorType, byte minCharacterLimit)
+        {
+            switch (errorType)
+            {
+                case ErrorType.NotWordInRange:
+                    Debug.Log(input.textComponent.text);
+                    Debug.Log((Color32)input.textComponent.color);
+
+                    if (input.textComponent.color.Equals(_inputTextNormalColor) && input.text.Length < minCharacterLimit)
+                    {
+                        yield return TranslateColor(input.textComponent, _inputTextNormalColor, _inputTextErrorColor);
+                    }
+
+                    if (input.textComponent.color.Equals(_inputTextErrorColor) && input.text.Length >= minCharacterLimit)
+                    {
+                        yield return TranslateColor(input.textComponent, _inputTextErrorColor, _inputTextNormalColor);
                     }
                     break;
             }
@@ -57,7 +86,7 @@ namespace Assets.Scripts.Utils.Validation
 
             while (index <= 1)
             {
-                target.color = Color.Lerp(from, to, index);
+                target.color = (Color32)Color.Lerp(from, to, index);
                 yield return null;
                 index += _indexModifier;
             }
@@ -66,7 +95,7 @@ namespace Assets.Scripts.Utils.Validation
         public void SetNormalPlaceholder(InputField input)
         {
             Text placeholder = input.placeholder.GetComponent<Text>();
-            placeholder.color = _normalColorPlaceholder;
+            placeholder.color = _placeholderNormalColor;
 
             if (input.name.Equals(InputFieldName.Nickname.ToString()))
             {

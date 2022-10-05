@@ -58,7 +58,7 @@ namespace Assets.Scripts.Utils.Validation
             return true;
         }
 
-        public void CheckIfNumberInRange(InputField input, Action<ErrorType> ErrorVizualizer, int minNumber, int maxNumber, int characterLimit = 1)
+        public void CheckIfNumberInRange(InputField input, Action<ErrorType> ErrorVizualizer, byte minNumber, byte maxNumber, byte characterLimit = 1)
         {
             input.characterLimit = characterLimit;
             Regex regex = new Regex($"[{minNumber}-{maxNumber}]");
@@ -71,6 +71,18 @@ namespace Assets.Scripts.Utils.Validation
             input.text = string.Empty;
             //StartCoroutine(_inputError.VizualizeError(input, ErrorType.NotNumberInRange));
             ErrorVizualizer(ErrorType.NotNumberInRange);
+        }
+
+        public bool CheckIfWordInRange(InputField input, Action<ErrorType, byte> ErrorVizualizer, byte minCharacterLimit)
+        {
+            ErrorVizualizer(ErrorType.NotWordInRange, minCharacterLimit);
+
+            if (input.text.Length < minCharacterLimit)
+            {
+                return true;
+            }
+
+            return false;
         }
     }
 }

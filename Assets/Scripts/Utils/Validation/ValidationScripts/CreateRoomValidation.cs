@@ -12,20 +12,32 @@ public class CreateRoomValidation : MonoBehaviour
     [SerializeField]
     private Button _createRoom;
 
-    private int _minPlayerNumber = 2;
-    private int _maxPlayerNumber = 5;
+    private readonly byte _minCharacterLimit = 4;
+    private readonly byte _maxCharacterLimit = 8;
+
+    private byte _minPlayerNumber = 2;
+    private byte _maxPlayerNumber = 5;
 
     private bool _keywordHasError = true;
+    private bool _keywordIsShort = true;
     private bool _playerNumberHasError = true;
 
     void Start()
     {
+        _keyword.characterLimit = _maxCharacterLimit;
+
         _keyword.onValueChanged.AddListener(delegate
         {
             InputValidation.Instance.DeleteAllWhiteSpaces(_keyword, (ErrorType error) =>
             {
                 StartCoroutine(InputErrorUIManager.Instance.VizualizeError(_keyword, error));
             });
+
+            _keywordIsShort = InputValidation.Instance.CheckIfWordInRange(_keyword, (ErrorType error, byte minCharacterLimit) =>
+            {
+                StartCoroutine(InputErrorUIManager.Instance.VizualizeError(_keyword, error, minCharacterLimit));
+            },
+            _minCharacterLimit);
 
             InputErrorUIManager.Instance.SetNormalPlaceholder(_keyword);
         });
@@ -65,7 +77,7 @@ public class CreateRoomValidation : MonoBehaviour
 
     private void SetButtonInteractability()
     {
-        if (!_keywordHasError && !_playerNumberHasError)
+        if (!_keywordHasError && !_keywordIsShort && !_playerNumberHasError)
         {
             _createRoom.interactable = true;
         }

@@ -14,10 +14,14 @@ namespace Assets.Scripts.Utils.Validation.ValidationScripts
         [SerializeField]
         private Button _joinRoom;
 
+        private byte _characterLimit = 10;
+
         private bool _nicknameHasError = true;
 
         void Start()
         {
+            _nickname.characterLimit = _characterLimit;
+
             _nickname.onValueChanged.AddListener(delegate
             {
                 CaseConverter.ConvertCaseToUpper(_nickname);

@@ -10,6 +10,7 @@ namespace Assets.Scripts.Utils.Validation.Enums
     {
         EmptyField,
         WhiteSpace,
-        NotNumberInRange
+        NotNumberInRange,
+        NotWordInRange
     }
 }
